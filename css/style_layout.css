@@ -1,0 +1,321 @@
+/* Prima parte dell'esercizio */
+/* Andrea Peretti mat. 718024 */
+.menu {
+	text-align: center;
+	background-color: black;
+	color: red;
+}
+
+.photo {
+	float: left;
+	border-color: #ff000f;
+	border-style: groove;
+	margin-top: 3em;
+	margin-right: 1em;
+}
+
+div#header img {
+	background-color: white;
+	border-style: none;
+	margin-top: 1em;
+}
+
+tr.color1 {
+	color: #0cff00;
+	background-color: #007301;
+}
+
+tr.color2 {	
+	color: #91abff;
+	background-color: #000ca6;
+}
+
+html {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	text-align: center;
+	min-width: 350px;
+	font-size: 76%;
+	background-color: black;
+	color: white;
+	font-family: "Comic Sans MS", Verdana, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+p {
+	margin-left: 1em;
+	margin-right: 1em;
+	margin-bottom: 1em;
+	margin-top: 2em;
+	text-align: justify;
+	text-indent: 2em;
+}
+
+h1 {
+	text-transform: uppercase;
+	letter-spacing: 1em;
+	text-align: center;
+	color: red;
+}
+
+h2 {
+	margin-top: 2em;
+	text-transform: capitalize;
+	letter-spacing: 0.5em;
+	text-align: center;
+	color: red;
+}
+
+li {
+	text-align: left;
+	list-style-image: url('../images/nota.png');
+}
+
+a:link {
+	text-decoration: none;
+	color: red;
+	font-weight: normal;
+}
+
+a:visited {
+	color: #ff8700;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+a:hover {
+	text-decoration: underline;
+	font-style: italic;
+	font-weight: normal;
+	color: red;
+}
+
+a:active {
+	font-weight: bold;
+	text-decoration: none;
+	color: red;
+}
+
+table {
+	width: 90%;
+	margin: 1em auto;
+	border-width: 0.3em;
+	border-style: outset;
+	table-layout: auto;
+}
+
+th {
+	padding: 5px;
+	color: #ff0300;
+	background-color: #00396a;
+	text-align: center;
+	font-size: 18px;
+}
+
+tr {
+	border-width: 5px;
+	text-align: center;
+}
+
+td {
+	padding: 3px;
+	text-align: center;
+}
+
+form {
+	width: 95%;
+	min-width: 400px;
+	margin: 20px;
+}
+
+.quote {
+	font-style: italic;
+	font-family: "Courier New", Courier, Monaco;
+}
+
+a.internal:link {
+	text-decoration: none;
+	color: #04bc00;
+	font-size: 16px;
+}
+
+a.internal:visited {
+	color: #f1ff00;
+	text-decoration: none;
+}
+
+a.internal:hover {
+	text-decoration: underline;
+	font-style: italic;
+	color: #04bc00;
+}
+
+a.internal:active {
+	font-weight: bold;
+	text-decoration: none;
+	color: #04bc00;
+}
+
+
+/* Seconda parte dell'esercizio */
+/*stili per il layout fisso*/
+html, body {
+	background-image: url(../images/background.jpg);
+	margin: 0;
+	padding:0;
+}
+
+
+/* Stili per il layout */
+div#container {
+	background-color: black;
+	width: 760px;
+	margin: 0 auto;
+	text-align: left;
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+}
+
+div#header {
+	text-align: center;
+}
+
+div#navigation {
+	padding-left: 0.5em;
+	border-right-width: 0.1em;
+	border-right-color: red;
+	border-right-style: solid;
+	float:left;
+	width: 13em;
+	color: red;
+}
+
+/*
+div#unav {
+	border: 1em solid
+}*/
+
+div#content_header {
+	border-width: 0.2em;
+	border-color: red;
+	border-style: solid;
+	background: silver;
+}
+
+div#content {
+	margin-left: 13em;
+	padding: 1em;
+}
+
+div#footer{
+	clear: both;
+	text-align:center;
+	padding: 0.5em;
+}
+
+div#navigation ul {
+	margin-left: 3em;
+	margin-right: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+div#navigation li {
+	martin: 0;
+	pudding: 0;
+}
+
+div#navigation a {
+	color:#369;
+	font: normal bold 1.2em/1.6em arial,sans-serif;
+	text-decoration: none;
+}
+
+div#navigation a:hover {
+	color: #033;
+	text-decoration: underline;
+}
+
+div#navigation a#activelink {
+	color: #033;
+	text-decoration: none;
+}
+
+div#navigation img {
+	margin-right: 0.5em;
+}
+
+div#immagineGrande {
+	height: 424px;
+	text-align: center;
+}div#immagineGrande img {
+	max-width: 424px;
+	max-height: 424px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	width: 98%;
+	clear: right;
+	text-align: center;
+	border-style: solid;
+	border-width: 0.3em;
+	border-color: red;
+}
+
+.anteprima{
+	margin: 0.1em;
+	max-height: 70px;
+	float: left;
+	display: inline;
+	border-width: 0px;
+	border-bottom-color: red;
+	width: 70px;
+}
+
+.anteprimaSelezionata{
+	width: 72px;
+	max-height: 72px;
+	float: left;
+	display: inline;
+	border-style: solid;
+	border-width: 2px;
+	border-color: red;
+}
+
+div#info {
+	color: red;
+	text-align: center;
+}
+
+div#elencoAnteprime {
+	margin: 0.1em;
+	clear: left;
+	text-align: center;
+}
+
+div#comandiFoto {
+	margin-bottom: 1em;
+	margin-top: 1em;
+	clear: both;
+	text-align: center;
+}
+
+ul#show {
+	display: block;
+}
+
+ul#hide {
+	display: none;
+}
+
+div#errori {
+	padding-left: 3em;
+	text-align: left;
+	color: red;
+}
+
