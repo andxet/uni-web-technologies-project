@@ -1,14 +1,11 @@
 <?php
 	require_once("script/config.php");
-	require_once($script_path."funzioni.php");
+	require_once(SCRIPT_PATH."funzioni.php");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-   		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" >
-		<script src="<?php echo $script_path; ?>menu.js" type="text/javascript"></script>
-   		<title><?php printTitolo($_SERVER['PHP_SELF']); ?></title>
-   		<link rel="stylesheet" type="text/css" href="<?php echo $css_path; ?>style_layout.css" >
+		<?php printHead(); ?>
    </head>
 <body>	
 
@@ -19,6 +16,7 @@
     	</div>
     	
         <div id="user_control">
+        	<?php printUserControl(); ?>
         </div>
         
         <div id="navigation">
@@ -28,7 +26,9 @@
         </div>
         
         <div id="content">
-        
+        	<div id="errori">
+        		<?php global $errori; echo $errori; ?>
+        	</div>
             COSE
         
         </div>

@@ -1,0 +1,99 @@
+/* Prima parte dell'esercizio */
+/* Andrea Peretti mat. 718024 */
+/* Seconda parte dell'esercizio */
+/*stili per il layout fisso*/
+
+body {
+	text-align: center;
+	min-width: 350px;
+	font-size: 76%;
+	font-family: "Comic Sans MS", Verdana, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+
+html, body {
+	background-color: #ffd000;
+	margin: 0;
+	padding:0;
+}
+
+
+/* Stili per il layout */
+div#container {
+	background-color: white;
+	width: 960px;
+	margin: 0 auto;
+	text-align: left;
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+}
+
+div#header {
+	text-align: center;
+}
+
+div#navigation {
+	padding-left: 0.5em;
+	border-right-width: 0.1em;
+	border-right-color: red;
+	border-right-style: solid;
+	float:left;
+	width: 13em;
+	color: red;
+}
+
+/*
+div#unav {
+	border: 1em solid
+}*/
+
+div#content_header {
+	border-width: 0.2em;
+	border-color: red;
+	border-style: solid;
+	background: silver;
+}
+
+div#content {
+	margin-left: 13em;
+	padding: 1em;
+}
+
+div#footer{
+	clear: both;
+	text-align:center;
+	padding: 0.5em;
+}
+
+ul#show {
+	display: block;
+}
+
+ul#hide {
+	display: none;
+}
+
+div#errori {
+	padding-left: 3em;
+	text-align: left;
+	color: red;
+}
+
+div#siteDescription {
+	float: left;
+	width: 500px;
+	text-align: center;
+	background-color: #5ca9ff;
+}
+
+div#login {
+	text-align: right;
+	background-color: #000cff;
+	float: right;
+}
+
+div#wellcomeTitle {
+}
+

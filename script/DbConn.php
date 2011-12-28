@@ -18,15 +18,11 @@ $Q_GET_ALL_ALBUM = "SELECT * FROM Dischi";
     
 function dbConnect(){
 	require_once('config.php');
-	global $user;
-	global $pass;
-	global $host;
-	global $db_name;
 	
-	$db = mysql_connect($host, $user, $pass)
+	$db = mysql_connect(DB_HOST, DB_USER, DB_PASS)
 		or die("Connessione non riuscita: " . mysql_error());
-    mysql_select_db($db_name, $db)
-    	or die ("Selezione del database non riuscita");
+    mysql_select_db(DB_NAME, $db)
+    	or die ("Selezione del database non riuscita: " . mysql_error());
     return $db;
 }
 
@@ -42,15 +38,7 @@ function getAlbums(){
 	return $restult;
 }*/
 
-function getAlbums(){
-	$Q_GET_ALL_ALBUM = "SELECT * FROM Dischi";
-
-	$db = dbConnect();
-	$albums = mysql_query($Q_GET_ALL_ALBUM, $db)
-		or die("Query non valida: " . mysql_error());
-	mysql_close($db);
-	return $albums;
-}
+//Query di ricerca
 
 function getMenus(){
 	$Q_GET_MENUS = "SELECT * FROM Menu ORDER BY posizione";
@@ -60,6 +48,16 @@ function getMenus(){
 		or die("Query non valida: " . mysql_error());
 	mysql_close($db);
 	return $menus;
+}
+
+function getUserControl(){
+	$Q_GET_MENUS = "SELECT link, Pagine.nome as nome FROM `Pagine` INNER JOIN `Menu` WHERE `nomeStile` = \"user_control\" ORDER BY Pagine.posizione";
+	$db = dbConnect();
+	$menus = mysql_query($Q_GET_MENUS, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return $menus;
+
 }
 	
 function getPages($menu){
@@ -79,6 +77,66 @@ function getTitolo($pagina){
 		or die("Query non valida: " . mysql_error());
 	mysql_close($db);
 	return $titolo;
+}
+
+function getUserInfo($user){
+	$Q_GET_USER_INFO = "SELECT * FROM `Utenti` WHERE `username` = \"$user\"";
+	$db = dbConnect();
+	$info = mysql_query($Q_GET_USER_INFO, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return mysql_fetch_array($info);
+}
+
+//Query di controllo
+function loginIsValid($user, $password){
+	$password = md5($password);
+	//$Q_GET_USER = "SELECT 'password' FROM 'utenti' WHERE 'username' = \"$user\" AND 'password' = \"$password\"";
+	$Q_GET_USER = "SELECT * FROM `Utenti` WHERE `username` = \"$user\" AND `password` = \"$password\"";
+	$db = dbConnect();
+	//echo $Q_GET_USER;
+	//echo $password."<-----";
+	$info = mysql_query($Q_GET_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	if(mysql_num_rows($info) == 1)
+		return true;
+	else
+		return false;
+}
+
+function isExistingEmail($mail){
+	$Q_SEARCH_EMAIL = "SELECT * FROM `Utenti` WHERE `email` = \"$mail\"";
+	$db = dbConnect();
+	$result = mysql_query($Q_SEARCH_EMAIL, $db)
+		or die("Query non valida: " . mysql_error());
+	if(mysql_num_rows($result) == 1)
+		return false;
+	else
+		return true;
+}
+
+function isExistingUser($user){
+	$Q_SEARCH_USER = "SELECT * FROM `Utenti` WHERE `username` = \"$user\"";
+	$db = dbConnect();
+	$result = mysql_query($Q_SEARCH_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	if(mysql_num_rows($result) == 1)
+		return false;
+	else
+		return true;
+}
+
+//Query di aggiunta
+function registraUtente($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	$Q_INSERT_USER = "INSERT INTO `Utenti` (`username`, `nome`, `cognome`, `email`, `luogo`, `avatar`, `banned`, `privilegi`, `attivo`, `password`) VALUES ('".$vett['nickname']."', '".$vett['nome']."', '".$vett['cognome']."', '".$vett['email']."', '".$vett['luogo']."', NULL, CURRENT_TIMESTAMP, 'guest', '".ATTIVAZIONE_UTENTE_DEFAULT."', '".md5($vett['pass'])."');";
+	$db = dbConnect();
+	$result = mysql_query($Q_INSERT_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return $result;
 }
 	
 ?>
