@@ -1,5 +1,5 @@
 <?php
-	define('SERVER_FORM_CONTROL', "YES");
+	define('SERVER_FORM_CONTROL', "true");//True se il server deve sempre effettuare il controllo dei form
 	define('SITE_NAME', "FumeZZi");
 	define('ATTIVAZIONE_UTENTE_DEFAULT', "TRUE");
 	//Configurazioni per il server:
@@ -18,6 +18,7 @@
 	define('WELCOME_PAGE', 'login.php');
 	define('REGISTRATION_PAGE', 'registrazione.php');
 	define('HOME_PAGE', 'index.php');
+	define('PROFILE_PAGE', 'profilo.php');
 	//Comfigurazioni per i form
 	define('MIN_LUNGHEZZA_CAMPO', 1);
 	//Altro

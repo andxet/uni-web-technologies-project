@@ -46,10 +46,10 @@ function stampa_menu(){
 }
 
 function printHead(){
-	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" >";
-	echo "<script src=\"".SCRIPT_PATH."\"menu.js\" type=\"text/javascript\"></script>";
-	echo "<title>"; printTitolo($_SERVER['PHP_SELF']); echo"</title>";
-   	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".CSS_PATH."style_layout.css\" >";
+	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" >\n";
+	//echo "<script src=\"".SCRIPT_PATH."menu.js\" type=\"text/javascript\"></script>\n";
+	echo "<title>"; printTitolo($_SERVER['PHP_SELF']); echo"</title>\n";
+   	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".CSS_PATH."style_layout.css\" >\n";
 }
 
 function printTitolo($pagina){

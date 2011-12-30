@@ -5,32 +5,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<?php printHead(); ?>
-   </head>
+   		<?php printHead(); ?>
+    </head>
 <body>	
 
     <div id="container">
     
     	<div id="header">
-    		<?php printHeader(); ?>
-    	</div>
-    	
-        <div id="user_control">
-        	<?php printUserControl(); ?>
-        </div>
-        
-        <div id="navigation">
-            <?php
-            stampa_menu();
-            ?>            	
-        </div>
+    		<?php 
+    		printHeader(); 
+    	echo "</div>";
+    		printMenu("user_control");
+
+            printMenu("navigation");
+            ?>  
         
         <div id="content">
-        	<div id="errori">
-        		<?php global $errori; echo $errori; ?>
-        	</div>
-            COSE
-        
+        	
+        	COSE
+        	       
         </div>
         
   		<div id="footer">

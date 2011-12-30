@@ -109,10 +109,11 @@ function isExistingEmail($mail){
 	$db = dbConnect();
 	$result = mysql_query($Q_SEARCH_EMAIL, $db)
 		or die("Query non valida: " . mysql_error());
-	if(mysql_num_rows($result) == 1)
-		return false;
-	else
+	if(mysql_num_rows($result) == 1){
 		return true;
+		}
+	else
+		return false;
 }
 
 function isExistingUser($user){
@@ -121,9 +122,9 @@ function isExistingUser($user){
 	$result = mysql_query($Q_SEARCH_USER, $db)
 		or die("Query non valida: " . mysql_error());
 	if(mysql_num_rows($result) == 1)
-		return false;
-	else
 		return true;
+	else
+		return false;
 }
 
 //Query di aggiunta
@@ -134,6 +135,30 @@ function registraUtente($vett){
 	$Q_INSERT_USER = "INSERT INTO `Utenti` (`username`, `nome`, `cognome`, `email`, `luogo`, `avatar`, `banned`, `privilegi`, `attivo`, `password`) VALUES ('".$vett['nickname']."', '".$vett['nome']."', '".$vett['cognome']."', '".$vett['email']."', '".$vett['luogo']."', NULL, CURRENT_TIMESTAMP, 'guest', '".ATTIVAZIONE_UTENTE_DEFAULT."', '".md5($vett['pass'])."');";
 	$db = dbConnect();
 	$result = mysql_query($Q_INSERT_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return $result;
+}
+
+function modificaUtente($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	$Q_EDIT_USER = "UPDATE  `fumezzi`.`Utenti` SET  `nome` =  '".$vett["nome"]."', `cognome` =  '".$vett["cognome"]."', `luogo` =  '".$vett["luogo"]."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$db = dbConnect();
+	$result = mysql_query($Q_EDIT_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return $result;
+}
+
+function modificaPassword($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	$Q_EDIT_PASSWORD = "UPDATE  `fumezzi`.`Utenti` SET  `password` =  '".$vett["pass"]."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$db = dbConnect();
+	$result = mysql_query($Q_EDIT_PASSWORD, $db)
 		or die("Query non valida: " . mysql_error());
 	mysql_close($db);
 	return $result;

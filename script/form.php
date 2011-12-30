@@ -4,11 +4,14 @@
 	$paginaRegistrazione = "newsletter.php";
 
 	function checkRegistration($vect){
-	
+	$controllo = true;
+	global $errori; $errori = "";
 	global $nickname; $nickname = $vect['nickname'];
 	global $mail; $mail = $vect['email'];
-	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES')
-		return controlloUser($nickname) && controlloEmail($mail);
+	$controllo = $controllo & controlloUser($nickname);
+	$controllo = $controllo & controlloEmail($mail);
+	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES' && !SERVER_FORM_CONTROL)
+		return $controllo;
 	
 	global $pass; $pass = $vect['pass'];
 	$passName = "Password";
@@ -22,9 +25,6 @@
 	$mailName = "eMail";
 	global $luogo; $luogo = $vect['luogo'];
 	$luogoName = "Luogo";
-	global $errori; $errori = "";
-	
-	$controllo = true;
 	
 	//Controllo se i campi sono stati riempiti
 	$controllo = $controllo & isSetted($nickname, $nicknameName);
@@ -54,6 +54,59 @@
 	//controllo se l'e-mail è valida
 	$controllo = $controllo & isMail($mail);
 	return $controllo;
+}
+
+function checkEditProfile($vect){
+	require_once("config.php");
+	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES' && !SERVER_FORM_CONTROL)
+		return true;
+	global $nome; $nome = $vect['nome'];
+	$nomeName = "Nome";
+	global $cognome; $cognome = $vect['cognome'];
+	$cognomeName = "Cognome";
+	global $luogo; $luogo = $vect['luogo'];
+	$luogoName = "Luogo";
+	global $errori; $errori = "";
+	
+	$controllo = true;
+	
+	//Controllo se i campi sono stati riempiti
+	$controllo = $controllo & isSetted($nome, $nomeName);
+	$controllo = $controllo & isSetted($cognome, $cognomeName);
+	
+	//Controllo se il nickname
+	
+	//Controllo se i campi nome e cognome hanno lunghezza accettabile
+	$controllo = $controllo & isLong($nome, $nomeName);
+	$controllo = $controllo & isLong($cognome, $cognomeName);
+	
+	//Controllo se i campi contengono caratteri proibiti
+	$controllo = $controllo & !hasProhibitedChars($nome, $nomeName);
+	$controllo = $controllo & !hasProhibitedChars($cognome, $cognomeName);
+	$controllo = $controllo & !hasProhibitedChars($luogo, $luogoName);
+	
+	return $controllo;
+}
+
+function checkEditPassword($vect){
+	$controllo = true;
+	global $errori; $errori = "";
+	global $passold; $passold = $vect['passold'];
+	require_once("config.php");
+	
+	$controllo = $controllo & controlloLogin($passold);
+	
+	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES' && !SERVER_FORM_CONTROL)
+		return $controllo;
+		
+	global $pass; $pass = $vect['pass1'];
+	$passName = "Password";
+	global $pass2; $pass2 = $vect['pass2'];
+	
+	$controllo = $controllo & checkPassword($pass, $pass2);
+	
+	return $controllo;
+	
 }
 
 function isSetted($campo, $nomeCampo){
@@ -91,7 +144,7 @@ function checkPassword($pass, $pass2){
 
 function controlloEmail($mail){
 	require_once("DbConn.php");
-	if(isExistingEmail($mail))
+	if(!isExistingEmail($mail))
 		return true;
 	else{
 		global $errori;
@@ -102,7 +155,7 @@ function controlloEmail($mail){
 
 function controlloUser($utente){
 	require_once("DbConn.php");
-	if(isExistingUser($utente))
+	if(!isExistingUser($utente))
 		return true;
 	else{
 		global $errori;
@@ -129,7 +182,7 @@ function hasProhibitedChars($campo, $nomeCampo){
 			return false;
 		}
 	else{
-		$errori = $errori.'Il campo <strong>'.$nomeCampo.'</strong> non pu&ograve; contenere i caratteri |, +, --, =, <, >, !=, (, ), %, @, #, *.<br />';
+		$errori = $errori.'Il campo <strong>'.$nomeCampo.'</strong> contiene caratteri proibiti.<br />';
 		return true;
 		}		
 }
@@ -172,5 +225,15 @@ function isChecked($focused){
 		return "";
 }
 
+function controlloLogin($pass){
+	require_once("DbConn.php");
+	global $errori;
+	if(loginIsValid(USER, $pass))
+		return true;
+	else{
+		$errori .= "La vecchia password non &egrave; quella giusta.";
+		return false;
+	}
+}
 
 ?>

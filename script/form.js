@@ -47,6 +47,51 @@ function checkRegistration(){
 	return controllo;
 }
 
+function checkEditProfile(){
+
+	errori = "";
+	nome = document.modulo.nome.value;
+	cognome = document.modulo.cognome.value;
+	luogo = document.modulo.luogo.value;
+	
+	
+	var controllo = true;
+	
+	//Controllo se i campi sono stati riempiti
+	controllo = controllo & isSet(nome, "Nome");
+	controllo = controllo & isSet(cognome, "Cognome");
+	
+	//Controllo se i campi nome e cognome hanno lunghezza > 1
+	controllo = controllo & isLong(nome, "Nome");
+	controllo = controllo & isLong(cognome, "Cognome");
+	
+	//Controllo se i campi contengono caratteri proibiti
+	controllo = controllo & !hasProhibitedChars(nome, "Nome");
+	controllo = controllo & !hasProhibitedChars(cognome, "Cognome");
+	controllo = controllo & !hasProhibitedChars(luogo, "Luogo");
+	
+	showErrors();
+	return controllo;
+}
+
+function checkEditPassword(){
+	errori = "";
+	var controllo = true;
+	pass1 = document.modulo.pass1.value;
+	pass2 = document.modulo.pass2.value;
+	passold = document.modulo.passold.value;
+	
+	//Controllo se le password sono uguali
+	controllo = controllo & controllaPass(pass1, pass2);
+	controllo = controllo & isSet(passold, "vecchia Password");
+	controllo = controllo & isSet(pass1, "Password");
+	controllo = controllo & isSet(pass2, "conferma Password");
+	
+	showErrors();
+	return controllo;
+}
+
+
 function isSet(campo, nomeCampo){
 	if ((campo == "") || (campo == "undefined")) {
 	   errori = errori + "Il campo <strong>" + nomeCampo + "</strong> &egrave; obbligatorio.\n<br />";
@@ -94,7 +139,7 @@ function hasProhibitedChars(campo, nomeCampo){
 			return false;
 		}
 	else{
-		errori = errori + "Il campo <strong>" + nomeCampo + "</strong> non pu&ograve; contenere i caratteri |, +, --, =, <, >, !=, (, ), %, @, #, *.<br />";
+		errori = errori + "Il campo <strong>" + nomeCampo + "</strong> contiene caratteri proibiti.<br />";
 		return true;
 		}		
 }
@@ -107,8 +152,23 @@ function checkRegistrazione(){
     else return false;        
 }
 
+function checkModificaProfilo(){
+	if(checkEditProfile()){
+		document.modulo.jsIsEnabled.value="YES";
+		document.modulo.submit();
+		}
+}
+
+function checkModificaPassword(){
+	if(checkEditPassword()){
+		document.modulo.jsIsEnabled.value="YES";
+		document.modulo.submit();
+	}
+		
+}
+
 function showErrors(){
-	document.getElementById("errori").innerHTML= errori;
+	document.getElementById("errori").innerHTML = errori;
 }
 
 function isLong(campo, nomeCampo){
@@ -120,7 +180,7 @@ function isLong(campo, nomeCampo){
 }
 
 function conferma_eliminazione() { 
-	conferma = confirm("Sei sicuro di voler cancellare tutto il contenuto del form?"); 
+	var conferma = confirm("Sei sicuro di voler cancellare tutto il contenuto del form?"); 
 	if (conferma) 
 		document.modulo.reset();
 } 

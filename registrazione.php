@@ -65,7 +65,6 @@
 			</script>
 			<noscript>
 				<input type=submit name="subscribe" value="Iscriviti!">
-                Subscribe</button>
 			</noscript>
             <script type="text/javascript">
 				<!--
