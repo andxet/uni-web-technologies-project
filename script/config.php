@@ -1,7 +1,8 @@
 <?php
-	define('SERVER_FORM_CONTROL', "true");//True se il server deve sempre effettuare il controllo dei form
+	define('SERVER_FORM_CONTROL', true);//True se il server deve sempre effettuare il controllo dei form
 	define('SITE_NAME', "FumeZZi");
-	define('ATTIVAZIONE_UTENTE_DEFAULT', "TRUE");
+	define('ATTIVAZIONE_UTENTE_DEFAULT', true);
+	define('RICOMPILA_CAMPO_PASSWORD', false);
 	//Configurazioni per il server:
 	define('DB_USER', 'root');
 	define('DB_PASS', 'root');
@@ -13,6 +14,7 @@
 	define('IMAGES_PATH', 'images/');
 	define('MINIATURE_PATH', IMAGES_PATH.'mini/');
 	define('AVATAR_PATH', IMAGES_PATH.'avatar/');
+	define('DEFAULT_AVATAR', 'default.jpg');
 	//Configurazione delle pagine di default
 	define('LOGIN_PAGE', 'login.php');
 	define('WELCOME_PAGE', 'login.php');

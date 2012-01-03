@@ -26,6 +26,15 @@ function dbConnect(){
     return $db;
 }
 
+function eseguiQuery($query){
+	$db = dbConnect();
+	//echo "\n$query";
+	$result = mysql_query($query, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return $result;
+}
+
 /*
 function getAlbums(){
 	if($db == null)
@@ -132,7 +141,7 @@ function registraUtente($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
-	$Q_INSERT_USER = "INSERT INTO `Utenti` (`username`, `nome`, `cognome`, `email`, `luogo`, `avatar`, `banned`, `privilegi`, `attivo`, `password`) VALUES ('".$vett['nickname']."', '".$vett['nome']."', '".$vett['cognome']."', '".$vett['email']."', '".$vett['luogo']."', NULL, CURRENT_TIMESTAMP, 'guest', '".ATTIVAZIONE_UTENTE_DEFAULT."', '".md5($vett['pass'])."');";
+	$Q_INSERT_USER = "INSERT INTO `Utenti` (`username`, `nome`, `cognome`, `email`, `luogo`, `avatar`, `banned`, `privilegi`, `attivo`, `password`) VALUES ('".$vett['username']."', '".$vett['nome']."', '".$vett['cognome']."', '".$vett['email']."', '".$vett['luogo']."', NULL, CURRENT_TIMESTAMP, 'guest', '".ATTIVAZIONE_UTENTE_DEFAULT."', '".md5($vett['password'])."');";
 	$db = dbConnect();
 	$result = mysql_query($Q_INSERT_USER, $db)
 		or die("Query non valida: " . mysql_error());
@@ -162,6 +171,16 @@ function modificaPassword($vett){
 		or die("Query non valida: " . mysql_error());
 	mysql_close($db);
 	return $result;
+}
+
+function getForm($form){
+	$Q_GET_FORM = "SELECT * FROM `Form` WHERE `nome` = \"$form\";";
+	return eseguiQuery($Q_GET_FORM);
+}
+
+function getFormFields($form){
+	$Q_GET_FORM_FIELDS = "SELECT * FROM `Campi` WHERE `nomeForm` = \"$form\" ORDER BY `posizione` ASC";
+	return eseguiQuery($Q_GET_FORM_FIELDS);
 }
 	
 ?>

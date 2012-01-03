@@ -152,12 +152,19 @@ function userInfo($user){
 	require_once(SCRIPT_PATH."DbConn.php");
 	$userInfo = getUserInfo($user);
 	echo "<div id=\"userInfo\">";
-	echo "<img src=\"".AVATAR_PATH.$userInfo['avatar']."\" />";
+	echo "<img src=\"".getAvatarPath($userInfo['avatar'])."\" />";
 	echo "<div id=\"username\">".$userInfo['username']."</div>";
 	echo "<div id=\"nome\">".$userInfo['nome']."</div>";
 	echo "<div id=\"cognome\">".$userInfo['cognome']."</div>";
 	echo "<div id=\"luogo\">".$userInfo['luogo']."</div>";
 	echo "</div>";
+}
+
+function getAvatarPath($avatar){
+	if(is_file(AVATAR_PATH.$avatar))
+		return AVATAR_PATH.$avatar;
+	else
+		return AVATAR_PATH.DEFAULT_AVATAR;
 }
 
 function stampaBacheca(){
