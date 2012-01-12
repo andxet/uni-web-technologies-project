@@ -3,14 +3,7 @@
 	require_once(SCRIPT_PATH."funzioni.php");
 	require_once(SCRIPT_PATH."form.php");
 	inizializza();
-	global $errori;
-	if($_POST)
-		if(isset($_POST["jsIsEnabled"]) && checkEditPassword($_POST)){
-			require_once(SCRIPT_PATH."DbConn.php");
-			if(modificaPassword($_POST))
-				header("Location: ".HOME_PAGE);
-			else die("Errore imprevisto nella modifica della password.");
-		}
+	checkForm("modificaPassword");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -26,35 +19,14 @@
     		<?php 
     		printHeader(); 
     	echo "</div>";
-    		printMenu("user_control");
+    		printMenu("Controlli utente");
 
-            printMenu("navigation");
+            printMenu("Menu");
             ?>  
         
         <div id="content">
-        	<div id="errori">
-        		<?php global $errori; echo $errori; ?>
-        	</div>
-        	 <form method="post" name="modulo" action="<?php echo $_SERVER['PHP_SELF']; ?>" name="modulo">
-        	 	<fieldset>
-        	 		<legend>Vecchia password</legend>
-        	 		<input type="password" name="passold">
-        	 		<input type="hidden" name="jsIsEnabled" value="NO">
-        	 	</fieldset>
-        	 	<fieldset>
-        	 		<legend>Nuova password</legend>
-        	 		<input type="password" name="pass1">
-        	 		<input type="password" name="pass2">
-        	 	</fieldset>
-        	 	<script type="text/javascript">
-				<!--
-					document.write('<button type="button" name="subscribe" onclick="checkModificaPassword();">Modifica password</button>');
-				//  -->
-				</script>
-				<noscript>
-					<input type="submit" name="subscribe" value="Modifica password">
-				</noscript>
-        	 </form>
+        	
+        	<?php stampaForm("modificaPassword"); ?>
         	       
         </div>
         

@@ -182,6 +182,11 @@
 		return $info["luogo"];
 	}
 	
+	function userMail(){
+		$info = getUserInfo(USER);
+		return $info["email"];
+	}
+	
 	/*
 	$paginaControllo = "newsletter.php";
 	$paginaRegistrazione = "newsletter.php";
@@ -271,7 +276,7 @@ function checkEditProfile($vect){
 	
 	return $controllo;
 }*/
-
+/*
 function checkEditPassword($vect){
 	$controllo = true;
 	global $errori; $errori = "";
@@ -291,7 +296,7 @@ function checkEditPassword($vect){
 	
 	return $controllo;
 	
-}
+}*/
 
 function isSetted($campo, $nomeCampo){
 	global $errori;
@@ -331,7 +336,9 @@ function isValidMail($mail){
 		return true;
 	else{
 		global $errori;
-		$errori .= "Esiste gi&agrave; un utente con questa <strong>mail</strong>, puoi <a href=\"login.php\">effettuare l'accesso qui.</a><br />";
+		if(USER == "")
+			$errori .= "Esiste gi&agrave; un utente con questa <strong>e-mail</strong>, puoi <a href=\"login.php\">effettuare l'accesso qui.</a><br />";
+		else $errori .= "Esiste gi&agrave; un utente con questa <strong>e-mail</strong>.<br />"; 
 		return false;
 	}
 }
@@ -447,7 +454,7 @@ function controlloLogin($pass){
 	if(loginIsValid(USER, $pass))
 		return true;
 	else{
-		$errori .= "La vecchia password non &egrave; quella giusta.";
+		$errori .= "La vecchia password non &egrave; quella giusta.<br />";
 		return false;
 	}
 }

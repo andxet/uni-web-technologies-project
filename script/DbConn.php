@@ -1,20 +1,4 @@
 <?php
-/*require_once('db.php');
-$user = 'root';
-$pass = 'root';
-$host = 'localhost';
-$db_name = 'Sito04_718024';
-$Q_GET_ALL_ALBUM = "SELECT * FROM Dischi";
- 
-/*function dbConnect(){
-	$dsn = 'mysql://'.$user.':'.$pass.'@'.$host.'/'.$db_name;
-	echo $dsn;
-	$db = DB::connect($dsn);
-	if (DB::isError($db)){ 
-		echo $db->getMessage();
-		exit;
-	} 
-}*/
     
 function dbConnect(){
 	require_once('config.php');
@@ -35,66 +19,97 @@ function eseguiQuery($query){
 	return $result;
 }
 
-/*
-function getAlbums(){
-	if($db == null)
-		dbConnect();
-	$result = $db->query($Q_GET_ALL_ALBUM); // check that result was ok
-	if (DB::isError($result)){
-		echo $db->getMessage();
-		exit;
-	}		
-	return $restult;
-}*/
-
 //Query di ricerca
 
 function getMenus(){
 	$Q_GET_MENUS = "SELECT * FROM Menu ORDER BY posizione";
-	
-	$db = dbConnect();
-	$menus = mysql_query($Q_GET_MENUS, $db)
-		or die("Query non valida: " . mysql_error());
-	mysql_close($db);
-	return $menus;
+	return eseguiQuery($Q_GET_MENUS);
 }
 
 function getUserControl(){
-	$Q_GET_MENUS = "SELECT link, Pagine.nome as nome FROM `Pagine` INNER JOIN `Menu` WHERE `nomeStile` = \"user_control\" ORDER BY Pagine.posizione";
-	$db = dbConnect();
-	$menus = mysql_query($Q_GET_MENUS, $db)
-		or die("Query non valida: " . mysql_error());
-	mysql_close($db);
-	return $menus;
-
+	$Q_GET_USER_CONTROL = "SELECT link, Pagine.nome as nome FROM `Pagine` INNER JOIN `Menu` WHERE `Menu`.`nomeStile` = 'user_control' ORDER BY Pagine.posizione";
+	return eseguiQuery($Q_GET_USER_CONTROL);
 }
 	
 function getPages($menu){
-	$Q_GET_PAGES = "SELECT * FROM Pagine WHERE menu=$menu ORDER BY posizione";
-	
-	$db = dbConnect();
-	$pages = mysql_query($Q_GET_PAGES, $db)
-		or die("Query non valida: " . mysql_error());
-	mysql_close($db);
-	return $pages;
+	$Q_GET_PAGES = "SELECT * FROM `Pagine` WHERE `menu` = '$menu'";
+	return eseguiQuery($Q_GET_PAGES);
 }
+
+function getPageInfo($page){
+	$Q_GET_PAGES = "SELECT * FROM `Pagine` WHERE `link` = '$page'";
+	return eseguiQuery($Q_GET_PAGES);
+}
+
+function getMenu($menu){
+	$Q_GET_MENU = "SELECT * FROM `Menu` WHERE `nome` = '$menu'";
+	return eseguiQuery($Q_GET_MENU);
+}
+
 
 function getTitolo($pagina){
 	$Q_GET_TITOLO = "SELECT * FROM  `Pagine` WHERE  `link` =  '$pagina'";
-	$db = dbConnect();
-	$titolo = mysql_query($Q_GET_TITOLO, $db)
-		or die("Query non valida: " . mysql_error());
-	mysql_close($db);
-	return $titolo;
+	return mysql_fetch_array(eseguiQuery($Q_GET_TITOLO));
 }
 
 function getUserInfo($user){
 	$Q_GET_USER_INFO = "SELECT * FROM `Utenti` WHERE `username` = \"$user\"";
-	$db = dbConnect();
-	$info = mysql_query($Q_GET_USER_INFO, $db)
-		or die("Query non valida: " . mysql_error());
-	mysql_close($db);
-	return mysql_fetch_array($info);
+	return mysql_fetch_array(eseguiQuery($Q_GET_USER_INFO));
+}
+
+function getUsers($inizio, $fine){
+	if($inizio < 0)
+		$inizio *= -1;
+	if($fine < 0)
+		$inizio *= -1;
+	if ($fine < $inizio){
+		$temp = $inizio;
+  		$inizio = $fine;
+  		$fine = $temp;
+	}
+
+	$Q_GET_USERS = "SELECT * FROM Utenti LIMIT $inizio, $fine";
+	return eseguiQuery($Q_GET_USERS);
+}
+
+function getSeries($inizio, $fine){
+	if($inizio < 0)
+		$inizio *= -1;
+	if($fine < 0)
+		$inizio *= -1;
+	if ($fine < $inizio){
+		$temp = $inizio;
+  		$inizio = $fine;
+  		$fine = $temp;
+	}
+		
+	$Q_GET_SERIES = "SELECT * FROM `Serie` LIMIT $inizio, $fine";
+	return eseguiQuery($Q_GET_SERIES);
+}
+
+function getFumetti($serie, $inizio, $fine){
+	if($inizio < 0)
+		$inizio *= -1;
+	if($fine < 0)
+		$inizio *= -1;
+	if ($fine < $inizio){
+		$temp = $inizio;
+  		$inizio = $fine;
+  		$fine = $temp;
+	}
+
+	$Q_GET_COMICS = "SELECT * FROM `Fumetti` WHERE `idSerie` = '$serie' LIMIT $inizio, $fine";
+	return eseguiQuery($Q_GET_COMICS);
+}
+
+function getSerie($idSerie){
+	$Q_GET_COMIC = "SELECT * FROM `Serie` WHERE `nome` = '$idSerie'";
+	return eseguiQuery($Q_GET_COMIC);
+}
+
+function getFumetto($idFumetto){
+	$Q_GET_COMIC = "SELECT * FROM `Fumetti` WHERE `idVolume` = '$serie'";
+	return eseguiQuery($Q_GET_COMIC);
 }
 
 //Query di controllo
@@ -136,6 +151,18 @@ function isExistingUser($user){
 		return false;
 }
 
+/////////////////////////////////////////FUNZIONI PER IL FUNZIONAMENTO DEI FORM
+
+function getForm($form){
+	$Q_GET_FORM = "SELECT * FROM `Form` WHERE `nome` = \"$form\";";
+	return eseguiQuery($Q_GET_FORM);
+}
+
+function getFormFields($form){
+	$Q_GET_FORM_FIELDS = "SELECT * FROM `Campi` WHERE `nomeForm` = \"$form\" ORDER BY `posizione` ASC";
+	return eseguiQuery($Q_GET_FORM_FIELDS);
+}
+
 //Query di aggiunta
 function registraUtente($vett){
 	if(!isset($vett))
@@ -148,6 +175,8 @@ function registraUtente($vett){
 	mysql_close($db);
 	return $result;
 }
+
+//////////////////////////////////////////FUNZIONI DI MODIFICA
 
 function modificaUtente($vett){
 	if(!isset($vett))
@@ -165,7 +194,7 @@ function modificaPassword($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
-	$Q_EDIT_PASSWORD = "UPDATE  `fumezzi`.`Utenti` SET  `password` =  '".$vett["pass"]."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$Q_EDIT_PASSWORD = "UPDATE  `fumezzi`.`Utenti` SET  `password` =  '".md5($vett["password"])."' WHERE  `Utenti`.`username` =  '".USER."';";
 	$db = dbConnect();
 	$result = mysql_query($Q_EDIT_PASSWORD, $db)
 		or die("Query non valida: " . mysql_error());
@@ -173,14 +202,25 @@ function modificaPassword($vett){
 	return $result;
 }
 
-function getForm($form){
-	$Q_GET_FORM = "SELECT * FROM `Form` WHERE `nome` = \"$form\";";
-	return eseguiQuery($Q_GET_FORM);
+function modificaMail($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	$Q_EDIT_MAIL = "UPDATE  `fumezzi`.`Utenti` SET  `email` =  '".$vett['email']."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$db = dbConnect();
+	$result = mysql_query($Q_EDIT_MAIL, $db)
+		or die("Query non valida: " . mysql_error());
+	mysql_close($db);
+	return $result;
 }
 
-function getFormFields($form){
-	$Q_GET_FORM_FIELDS = "SELECT * FROM `Campi` WHERE `nomeForm` = \"$form\" ORDER BY `posizione` ASC";
-	return eseguiQuery($Q_GET_FORM_FIELDS);
+function editUserState($vett){
+	$Q_EDIT_USER = "UPDATE  `fumezzi`.`Utenti` SET ";
+	if($vett["ban"] != null)
+		$Q_EDIT_USER .= "`banned` = '".$vett["ban"]."' , ";
+	$Q_EDIT_USER .= "`attivo` =  '".$vett["activated"]."' WHERE  `Utenti`.`username` =  '".$vett["user"]."';";
+	eseguiQuery($Q_EDIT_USER);
 }
+
 	
 ?>

@@ -2,8 +2,6 @@
 	require_once("script/config.php");
 	require_once(SCRIPT_PATH."funzioni.php");
 	inizializza();
-	require_once(SCRIPT_PATH."form.php");
-	checkForm("modificaDati");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -19,19 +17,18 @@
     		<?php 
     		printHeader(); 
     	echo "</div>";
-    		printMenu("user_control");
+    		printMenu("Controlli utente");
 
-            printMenu("navigation");
+            printMenu("Menu");
             ?>  
         
         <div id="content">
-        	<?php
-        		$info = getUserInfo(USER);
-        	?>
-            <h1>Dati utente <?php echo USER; ?></h1>
+        	<?php $info = getUserInfo(USER); ?>
+        	<h2>I tuoi dati:</h2>
+        	<?php userInfo(USER); ?>
             <button type="button"><a href="edit_password.php">Modifica la password</a></button><br/>
-            <?php echo $info["email"] ?><button type="button"><a href="edit_mail.php">Modifica l'eMail</a></button><br/>
-            <?php stampaForm("modificaDati"); ?>   
+            eMail: <?php echo $info["email"] ?><button type="button"><a href="edit_mail.php">Modifica</a></button><br/>
+            <button type="button"><a href="edit_user.php">Modifica altri dati</a></button><br/>
         </div>
         
   		<div id="footer">

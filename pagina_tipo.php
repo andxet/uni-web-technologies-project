@@ -15,9 +15,9 @@
     		<?php 
     		printHeader(); 
     	echo "</div>";
-    		printMenu("user_control");
+    		printMenu("Controlli utente");
 
-            printMenu("navigation");
+            printMenu("Menu");
             ?>  
         
         <div id="content">

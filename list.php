@@ -15,17 +15,28 @@
     	<div id="header">
     		<?php 
     		printHeader(); 
-    		echo "</div>";
+    	echo "</div>";
     		printMenu("Controlli utente");
 
             printMenu("Menu");
             ?>  
         
         <div id="content">
+        	
         	<?php
-        		//stampa_bacheca();
-        		userInfo(USER);
-        	?>        
+        		if(isset($_GET['start']) && isset($_GET['how'])){
+        			$start = $_GET['start'];
+        			$how = $_GET['how'];
+        		}
+        		else{
+        		$start = 0;
+        		$how = NUMBER_SERIES_PER_PAGE;
+        		}
+        		
+        		printSeries($start, $how);
+        		//printPageSelector("Serie");
+        	?>
+        	       
         </div>
         
   		<div id="footer">
