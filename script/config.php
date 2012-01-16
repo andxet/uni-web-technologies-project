@@ -1,7 +1,7 @@
 <?php
 	define('SERVER_FORM_CONTROL', true);//True se il server deve sempre effettuare il controllo dei form
 	define('SITE_NAME', "FumeZZi");
-	define('ATTIVAZIONE_UTENTE_DEFAULT', true);
+	define('ATTIVAZIONE_UTENTE_DEFAULT', "false"); //Settare una stringa, "true" o "false"
 	define('RICOMPILA_CAMPO_PASSWORD', false);
 	define('LOGO_NAME', "logo.png");
 	define('SITE_ICON', "icon.png");
@@ -31,6 +31,8 @@
 	define('SBANNATO_IMG', DEFAULTS_PATH.'sbannato.jpg');
 	define('ATTIVATO_IMG', DEFAULTS_PATH.'attivato.jpg');
 	define('DISATTIVATO_IMG', DEFAULTS_PATH.'disattivato.jpg');
+	define('ADD_IGM', DEFAULTS_PATH."add.png");
+	define('EDIT_IGM', DEFAULTS_PATH."edit.png");
 	//Configurazione delle pagine di default
 	define('LOGIN_PAGE', 'login.php');
 	define('WELCOME_PAGE', 'login.php');

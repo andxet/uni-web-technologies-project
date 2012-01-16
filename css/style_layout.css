@@ -134,3 +134,15 @@ div#userInfo #username {
 	color: #ff0c00;
 }
 
+table{
+	max-width: 720px;
+}
+
+div#controlliSerie, div#controlliFumetti{
+	text-align: center;
+	border-style: dashed;
+	border-color: red;
+	margin: 0.3em;
+	padding: 0.3em;
+	background-color: #b5ceff;
+}

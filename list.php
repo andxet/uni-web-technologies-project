@@ -24,6 +24,8 @@
         <div id="content">
         	
         	<?php
+        		printMenu("Controlli serie");
+        		/*
         		if(isset($_GET['start']) && isset($_GET['how'])){
         			$start = $_GET['start'];
         			$how = $_GET['how'];
@@ -32,8 +34,8 @@
         		$start = 0;
         		$how = NUMBER_SERIES_PER_PAGE;
         		}
-        		
-        		printSeries($start, $how);
+        		*/
+        		printSeries();
         		//printPageSelector("Serie");
         	?>
         	       

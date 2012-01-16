@@ -173,7 +173,7 @@
 	}	
 		
 	function campoNecessitaControllo($tipo){
-		$tipiDaControllare = array(1 => 'text','textfield','password','confermaPass','login', 'file', 'checkbox');
+		$tipiDaControllare = array(1 => 'text','textfield','password','confermaPass','login', 'file', 'checkbox', 'int', 'data');
 		if(!array_search($tipo, $tipiDaControllare))
 			return false;
 		else
@@ -198,6 +198,10 @@
 	function userMail(){
 		$info = getUserInfo(USER);
 		return $info["email"];
+	}
+	
+	function setSerieGet(){
+		return $_GET["serie"];
 	}
 	
 	/*
@@ -356,6 +360,29 @@ function checkPassword($pass, $pass2){
 		return false;}
 	else
 		return true;
+}
+
+function checkData($data){
+	global $errori;
+	if($stamp = strtotime($data) === false){
+		$errori .= "La <strong>data<strong> ha un formato non corretto.<br />";
+		return false;
+		}
+	if(checkdate(date('m', $stamp), date('d', $stamp), date('Y', $stamp)))
+		return true;
+	else{
+		$errori .= "La <strong>data<strong> non &egrave; valida.<br />";
+		return false;
+	}
+}
+
+function controlloVolume($volume){
+	global $errori;
+	if($volume < 0){
+		$errori .= "Il <strong>numero del volume</strong> non &egrave; valido.<br />";
+		return false;
+		}
+	return $volume > 0;
 }
 
 function isValidMail($mail){

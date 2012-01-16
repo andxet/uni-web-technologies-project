@@ -72,7 +72,8 @@ function getUsers($inizio, $fine){
 	return eseguiQuery($Q_GET_USERS);
 }
 
-function getSeries($inizio, $fine){
+function getSeries(){
+	/*
 	if($inizio < 0)
 		$inizio *= -1;
 	if($fine < 0)
@@ -81,13 +82,19 @@ function getSeries($inizio, $fine){
 		$temp = $inizio;
   		$inizio = $fine;
   		$fine = $temp;
-	}
+	}*/
 		
-	$Q_GET_SERIES = "SELECT * FROM `Serie` LIMIT $inizio, $fine";
+	//$Q_GET_SERIES = "SELECT * FROM `Serie` LIMIT $inizio, $fine";
+	$Q_GET_SERIES = "SELECT * FROM `Serie`";
 	return eseguiQuery($Q_GET_SERIES);
 }
 
-function getFumetti($serie, $inizio, $fine){
+function getSerieComicNum($serie){
+	$Q_COUNT_COMICS = "SELECT COUNT(*) FROM `Fumetti` WHERE `idSerie`=\"$serie\" ";
+	return eseguiQuery($Q_COUNT_COMICS);
+}
+
+function getFumetti($serie){/*
 	if($inizio < 0)
 		$inizio *= -1;
 	if($fine < 0)
@@ -96,9 +103,9 @@ function getFumetti($serie, $inizio, $fine){
 		$temp = $inizio;
   		$inizio = $fine;
   		$fine = $temp;
-	}
+	}*/
 
-	$Q_GET_COMICS = "SELECT * FROM `Fumetti` WHERE `idSerie` = '$serie' LIMIT $inizio, $fine";
+	$Q_GET_COMICS = "SELECT * FROM `Fumetti` WHERE `idSerie` = '$serie' ORDER BY volume";
 	return eseguiQuery($Q_GET_COMICS);
 }
 
@@ -222,6 +229,17 @@ function aggiungiSerie($vett){
 	return eseguiQuery($Q_INSERT_SERIE);
 }
 
+function aggiungiFumetto($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	require_once("immagini.php");
+	if(!uploadFumettoImg($vett["serie"].$vett["volume"]))
+		return false;
+	$Q_ADD_COMIC = "INSERT INTO  `fumezzi`.`Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
+	return eseguiQuery($Q_ADD_COMIC);	
+}
+
 
 //////////////////////////////////////////FUNZIONI DI MODIFICA
 
@@ -270,6 +288,12 @@ function editUserState($vett){
 	$Q_EDIT_USER .= "`attivo` =  '".$vett["activated"]."' WHERE  `Utenti`.`username` =  '".$vett["user"]."';";
 	eseguiQuery($Q_EDIT_USER);
 }
+
+//Query di eliminazione
+function eliminaUtente($utente){
+	$Q_DELETE_USER = "DELETE FROM `fumezzi`.`Utenti` WHERE `Utenti`.`username` = '$utente'";
+	eseguiQuery($Q_DELETE_USER);
+	}
 
 	
 ?>

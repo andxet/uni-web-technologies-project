@@ -49,8 +49,9 @@ function uploadSerieImg($nomeSerie){
 
 function uploadFumettoImg($nomeFumetto){
 	require_once("config.php");
-	if(salvaImmagine(ORIGINAL_PATH."Serie_".$estensioni_immagini[$_FILES["nomefile"]["type"]]))
-		if(creaMiniatura(ORIGINAL_PATH, "Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]], SERIE_PATH, 70, 180))
+	global $estensioni_immagini;
+	if(salvaImmagine(ORIGINAL_PATH."Fumetto_".$nomeFumetto.$estensioni_immagini[$_FILES["nomefile"]["type"]]))
+		if(creaMiniatura(ORIGINAL_PATH, "Fumetto_".$nomeFumetto.$estensioni_immagini[$_FILES["nomefile"]["type"]], FUMETTI_PATH, 120, 180))
 			return true;
 	else
 		return false;

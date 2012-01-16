@@ -148,7 +148,10 @@ function printMenu($nome){
 		if(!in_array(PRIVILEGI, explode(",", $pagina["permessi"]))){
 			continue;}
 		if(file_exists($pagina['link']))
-			echo "<button><a href=\"".$pagina['link']."\">".ricavaNome($pagina['nome'])."</a></button>";
+			if(function_exists($pagina["nome"]))
+				call_user_func($pagina["nome"]);
+			else
+				echo "<button><a href=\"".$pagina['link']."\">".$pagina['nome']."</a></button>";
 	}
 	echo "</div>";
 }
@@ -162,6 +165,24 @@ function ricavaNome($nome){
 			return $nome;
 			break;
 	}
+}
+
+function printUser(){
+	echo "<button><a href=\"profilo.php\">".USER."</a></button>";;
+}
+
+function nuovaSerieButton(){
+	echo "<a href=aggiungiSerie.php><img src='".ADD_IGM."' />Nuova serie</a>";
+}
+
+function nuovoFumettoButton(){
+	$serie = $_GET["serie"];
+	//echo $serie;
+	echo "<a href=\"aggiungiFumetto.php?serie=".$serie."\"><img src='".ADD_IGM."' />Nuovo fumetto</a>";
+	/*?>
+	
+	<a href=aggiungiFumetto.php?serie=<?php echo $serie; ?> ><img src='<?php echo ADD_IGM; ?>' />Nuovo fumetto</a>
+	<?php*/
 }
 
 //Script per pagine specifiche
@@ -266,8 +287,8 @@ function stampaBacheca(){
 	
 }
 
-function printSeries($inizio, $quante){
-	$series = getSeries($inizio, $inizio+$quante);
+function printSeries(){
+	$series = getSeries();
 	if(mysql_num_rows($series) == 0)
 		echo "Non ci sono serie. Ritorna tra un po'!";
 	for ($j = 0; $j < mysql_num_rows($series); $j++){
@@ -279,14 +300,43 @@ function printSeries($inizio, $quante){
 function printSerie($IdSerie){
 	require_once("DbConn.php");
 	$serie = mysql_fetch_array(getSerie($IdSerie));
-	printSerieInfo($serie);	
+	if(!$serie)
+		echo "Non esiste nessuna serie con questo nome: $IdSerie.";
+	else
+		printSerieInfo($serie);	
 }
+
+function printSerieDettagli($IdSerie){
+	require_once("DbConn.php");
+	$serie = mysql_fetch_array(getSerie($IdSerie));
+	if(!$serie)
+		echo "Non esiste nessuna serie con questo nome: $IdSerie.";
+	else
+		printSerieInfoDettagli($serie);	
+}
+
 
 function printSerieInfo($serie){
 	require_once(SCRIPT_PATH."DbConn.php");
 	echo "<div id=\"serieInfo\">";
 	echo "<img src=\"".getSeriePath("Serie_".$serie["nome"].".jpg")."\" />";
-	echo "<div id=\"nome\"><a href='serie.php?".$serie['nome']."'>".$serie['nome']."</a></div>";
+	echo "<div id=\"nome\"><a href='serie.php?serie=".$serie['nome']."'>".$serie['nome']."</a></div>";
+	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
+	echo "<div id=\"elencoFumetti\">";
+	//printElencoFumetti($serie["nome"]);
+	$numFumetti = mysql_fetch_array(getSerieComicNum($serie["nome"]));
+	if($numFumetti[0] == 0)
+		echo "Non sono ancora stati inseriti fumetti per questa serie.";
+	else
+		echo $numFumetti[0]." volumi!";
+	echo "</div></div>";
+}
+
+function printSerieInfoDettagli($serie){
+	require_once(SCRIPT_PATH."DbConn.php");
+	echo "<div id=\"serieInfo\">";
+	echo "<img src=\"".getSeriePath("Serie_".$serie["nome"].".jpg")."\" />";
+	echo "<div id=\"nomeSerie\">".$serie['nome']."</div>";
 	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
 	echo "<div id=\"elencoFumetti\">";
 	printElencoFumetti($serie["nome"]);
@@ -295,10 +345,11 @@ function printSerieInfo($serie){
 
 function printElencoFumetti($serie){
 	require_once("DbConn.php");
-	$fumetti = getFumetti($serie["nome"], 0 , LIST_FUMETTI_LIMIT);
+	$fumetti = getFumetti($serie);//, 0 , LIST_FUMETTI_LIMIT);
 	echo '<div id="fumettiInfo">';
-	if(mysql_num_rows($fumetti) == 0)
-		echo "Non esistono ancora fumetti per questa serie.";
+	//if(mysql_num_rows($fumetti) == 0)
+		//echo "Non esistono ancora fumetti per questa serie.";
+	print mysql_num_rows($fumetti);
 	for ($j = 0; $j < mysql_num_rows($fumetti); $j++){
 			$fumetto = mysql_fetch_array($fumetti);
 			printFumettoLittle($fumetto);
@@ -312,7 +363,8 @@ function printFumettoLittle($fumetto){
 	if($fumetto['dataUscita'] > time())
 		return;
 	echo '<div id="fumettoLittle">';
-	echo "<img src=\"".getFumettoLittlePath($fumetto["idVolume"].".jpg")."\" />";
+	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg"."\" />";
+	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
 	echo '<div id="nome">'.getNomeFumetto($fumetto['nome'], $fumetto['volume'])."</div>";
 	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
@@ -325,10 +377,12 @@ function printUtenti(){
 	$utenti = getUsers(0, 100);
 	echo "<div id=\"elencoUtenti\">\n\t<table border=1>";
 	?>
-	<tr><th>Att.</th><th>Username</th><th>Nome</th><th>Cognome</th><th>e-Mail</th><th>Permessi</th><th>Ban</th><th>Salva</th></tr>
+	<tr><th>Att.</th><th>Username</th><th>Nome</th><th>Cognome</th><th>e-Mail</th><th>Permessi</th><th>Ban</th><th>Elimina</th><th>Salva</th></tr>
 	<?php
 	for ($j = 0; $j < mysql_num_rows($utenti); $j++){
 			$utente = mysql_fetch_array($utenti);
+			if($utente["username"] == USER)
+				continue;
 			printRow($utente);
 		}
 	echo "</table></div>";
@@ -388,7 +442,7 @@ function printRow($utente){
 		echo (time() + (31 * 24 * 60 * 60));
 		echo ">Un mese</option></div></td>\n";
 	}
-	
+	echo "<td><a href=elimina_utente.php?utente=".$utente["username"].">Elimina</a></td>";
 	echo "<td><input type='submit' value=Salva></td></form></tr>";
 	//Nel caso si vogliano inserire altri campi, la chiusura del campo tr va fatta al di fuori di questa funzione
 		
