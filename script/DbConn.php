@@ -128,6 +128,24 @@ function loginIsValid($user, $password){
 		return false;
 }
 
+function loginIsValid2($user, $password){
+	$password = md5($password);
+	//$Q_GET_USER = "SELECT 'password' FROM 'utenti' WHERE 'username' = \"$user\" AND 'password' = \"$password\"";
+	$Q_GET_USER = "SELECT * FROM `Utenti` WHERE `username` = \"$user\" AND `password` = \"$password\"";
+	$db = dbConnect();
+	//echo $Q_GET_USER;
+	//echo $password."<-----";
+	$info = mysql_query($Q_GET_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	//print_r(mysql_fetch_row($info));
+	if(mysql_num_rows($info) == 1){
+		$info = mysql_fetch_array($info);
+		return $info["privilegi"];
+		}
+	else
+		return false;
+}
+
 function isExistingEmail($mail){
 	$Q_SEARCH_EMAIL = "SELECT * FROM `Utenti` WHERE `email` = \"$mail\"";
 	$db = dbConnect();
@@ -150,6 +168,18 @@ function isExistingUser($user){
 	else
 		return false;
 }
+
+function isExistingSeries($user){
+	$Q_SEARCH_USER = "SELECT * FROM `Utenti` WHERE `username` = \"$user\"";
+	$db = dbConnect();
+	$result = mysql_query($Q_SEARCH_USER, $db)
+		or die("Query non valida: " . mysql_error());
+	if(mysql_num_rows($result) == 1)
+		return true;
+	else
+		return false;
+}
+
 
 /////////////////////////////////////////FUNZIONI PER IL FUNZIONAMENTO DEI FORM
 
@@ -175,6 +205,23 @@ function registraUtente($vett){
 	mysql_close($db);
 	return $result;
 }
+
+function aggiungiSerie($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	require_once("immagini.php");
+	if(!uploadSerieImg($vett["nome"]))
+		return false;
+	$Q_INSERT_SERIE = "INSERT INTO  `fumezzi`.`Serie` (`nome` , `inCorso`) VALUES ( '".$vett['nome']."', ";
+	if(isset($vett["inCorso"]))
+		$Q_INSERT_SERIE .= " 'true' ";
+	else
+		$Q_INSERT_SERIE .= " 'false' ";
+	$Q_INSERT_SERIE .= ");";
+	return eseguiQuery($Q_INSERT_SERIE);
+}
+
 
 //////////////////////////////////////////FUNZIONI DI MODIFICA
 
@@ -218,6 +265,8 @@ function editUserState($vett){
 	$Q_EDIT_USER = "UPDATE  `fumezzi`.`Utenti` SET ";
 	if($vett["ban"] != null)
 		$Q_EDIT_USER .= "`banned` = '".$vett["ban"]."' , ";
+	if(isset($vett["privilegi"]))
+		$Q_EDIT_USER .= "`privilegi` = '".$vett["privilegi"]."' , ";
 	$Q_EDIT_USER .= "`attivo` =  '".$vett["activated"]."' WHERE  `Utenti`.`username` =  '".$vett["user"]."';";
 	eseguiQuery($Q_EDIT_USER);
 }

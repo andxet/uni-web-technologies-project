@@ -24,8 +24,8 @@
 	define('DEFAULT_AVATAR', 'avatar.jpg');
 	define('DEFAULT_SERIE', 'serie.jpg');
 	define('DEFAULT_FUMETTO', 'fumetto.jpg');
-	define('SERIE_IMG_PATH', IMAGES_PATH.'.jpg');
 	define('DEFAULTS_PATH', IMAGES_PATH.'defaults/');
+	define('ORIGINAL_PATH', IMAGES_PATH.'originali/');
 	//IMMAGINI VARIE
 	define('BANNATO_IMG', DEFAULTS_PATH.'bannato.jpg');
 	define('SBANNATO_IMG', DEFAULTS_PATH.'sbannato.jpg');
@@ -39,9 +39,15 @@
 	define('PROFILE_PAGE', 'profilo.php');
 	define('BAN_PAGE', 'ban.php');
 	define('ACTIVE_PAGE', 'attiva.php');
-	
+	//Configurazioni immagini
+	$formati_immagine = array(".jpg", ".gif", ".png");
+	$tipi_immagine = array("image/jpeg", "image/gif", "image/png");
+	$estensioni_immagini = array("image/jpeg" => ".jpg", "image/gif" => ".gif", "image/png" => ".png");
 	//Comfigurazioni per i form
 	define('MIN_LUNGHEZZA_CAMPO', 1);
 	//Altro
 	$errori = "";
+	
+	//Dimensioni immagine serie: 720 * 180 = h 4 volte la l
+	
 ?>

@@ -46,6 +46,8 @@
 			}
 			if(!is_null($campo["customFunction"]))//Eseguo una funzione particolare
 				if(function_exists($campo["customFunction"])){
+					if(!isset($_POST[$campo["nome"]]))
+						$_POST[$campo["nome"]] = null;
 					if(!call_user_func($campo["customFunction"], $_POST[$campo["nome"]]))
 						$valido = false;
 					}
@@ -65,7 +67,7 @@
 		$fields = getFormFields($nomeForm);
 		
 		echo '<div id="errori">'.$errori.'</div>'; 
-		echo "<form method=\"".$form['metodo']."\" name=\"$nomeForm\" action=\"".$_SERVER['PHP_SELF']."\">";
+		echo "<form method=\"".$form['metodo']."\" name=\"$nomeForm\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
 		echo "<input type=\"hidden\" name=\"jsIsEnabled\" value=\"NO\"/>";
 		$leggende = 0;
 		for ($i = 0; $i < mysql_num_rows($fields); $i++){
@@ -120,7 +122,18 @@
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
 				break;
-				
+				//////////Campo check
+				case 'checkbox':
+					echo $field['descrizione']. ": ";
+					if($field['richiesto'] == 'y')
+						echo '*';
+					echo "<input type=\"".$field['tipo']."\" name=\"".$field['nome']."\" value=\"".getValue($field["valore"])."\"";
+					if($field["setPrecedente"] == 'y')
+						echo setPrecedenti($field['nome']) == "true"? "checked" : "";
+					echo "\">";
+					if($field['aCapo'] == 'y')
+						echo "<br/>";
+					break;
 				//////////Altri campi	
 				default:
 					stampaCampo($field);
@@ -160,7 +173,7 @@
 	}	
 		
 	function campoNecessitaControllo($tipo){
-		$tipiDaControllare = array(1 => 'text','textfield','password','confermaPass','login');
+		$tipiDaControllare = array(1 => 'text','textfield','password','confermaPass','login', 'file', 'checkbox');
 		if(!array_search($tipo, $tipiDaControllare))
 			return false;
 		else
@@ -305,6 +318,20 @@ function isSetted($campo, $nomeCampo){
 	   return false;}
 	else
 		return true;
+}
+
+function fileIsSet(){
+	global $errori;
+	if(!is_uploaded_file($_FILES['nomefile']['tmp_name'])) {
+		$errori = $errori."Non &egrave; stato selezionato nessun file per l'upload.<br />";
+		return false;
+	}
+	if($_FILES["nomefile"]["error"] == 4){
+		return false;
+	}
+	else
+		return true;
+		
 }
 
 function isMail($mail){

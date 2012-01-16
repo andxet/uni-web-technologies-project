@@ -22,6 +22,7 @@ function userIsActive($user){
 }
 
 function isAuthorizedUser($user, $page){
+	//echo $page;
 	require_once("DbConn.php");
 	$userInfo = getUserInfo($user);
 	if(userIsBanned($userInfo["banned"]))
@@ -32,8 +33,10 @@ function isAuthorizedUser($user, $page){
 	if($pageInfo == null)
 		return "ok";
 	$permessiPagina = explode(",", $pageInfo["permessi"]);
-	if(in_array($userInfo["privilegi"], $permessiPagina))
+	if(in_array($userInfo["privilegi"], $permessiPagina)){
+		//if(!isset(PRIVILEGI))
 		return "ok";
+		}
 	else 
 		return "noAut";
 }
@@ -49,6 +52,7 @@ session_start();
 		switch($login){
 			case "ok":
 				define('USER', $_SESSION['user']);
+				define('PRIVILEGI', $_SESSION['privilegi']);
 				return true;
 				break;
 			case 'inactive':
@@ -61,7 +65,7 @@ session_start();
 				header("Location: ".BAN_PAGE);
 				//$errori = "L'utente &egrave; bannato.<br />";
 				break;
-			case 'noAuth':
+			case 'noAut':
 	    			header("Location: ".HOME_PAGE);
 				break;
 			}
@@ -141,8 +145,8 @@ function printMenu($nome){
 	$pagine = getPages($nome);
 	for ($j = 0; $j < mysql_num_rows($pagine); $j++){
 		$pagina = mysql_fetch_array($pagine);
-		if(!isAuthorizedUser(USER, $pagina["link"]))
-			continue;
+		if(!in_array(PRIVILEGI, explode(",", $pagina["permessi"]))){
+			continue;}
 		if(file_exists($pagina['link']))
 			echo "<button><a href=\"".$pagina['link']."\">".ricavaNome($pagina['nome'])."</a></button>";
 	}
@@ -176,15 +180,17 @@ function login_script(){//Se l'utente ha effettuato l'accesso o ha già visitato
 	
 	if(isset($_POST) && isset($_POST['username']) && isset($_POST['password'])){
 		require_once(SCRIPT_PATH."DbConn.php");
-		if(loginIsValid($_POST['username'], $_POST['password'])){
-			$_SESSION['user'] = $_POST['username'];
-			setcookie('user', $_SESSION['user'], time()+3600);
-			header("Location: " . HOME_PAGE);
-			}
-		else{
+		$permessi = loginIsValid2($_POST['username'], $_POST['password']);
+		if($permessi == false){
 			global $errori;
 			$errori = "Hai inserito delle credenziali errate. Riprova.<br />"; 
 		}
+		else{
+			$_SESSION['user'] = $_POST['username'];
+			$_SESSION['privilegi'] = $permessi;
+			setcookie('user', $_SESSION['user'], time()+3600);
+			header("Location: " . HOME_PAGE);
+			}
 			
 	}
 		
@@ -230,17 +236,17 @@ function getAvatarPath($avatar){
 }
 
 function getSeriePath($serieImg){
-	if(is_file(SERIE_IMG_PATH.$serieImg))
-		return SERIE_IMG_PATH.$serieImg;
+	if(is_file(SERIE_PATH.$serieImg))
+		return SERIE_PATH.$serieImg;
 	else
 		return DEFAULTS_PATH.DEFAULT_SERIE;
 }
 
 function getInCorsoValue($val){
-	if($val)
+	if($val == "true")
 		return "In corso.";
 	else
-		return "Terminata";
+		return "Terminata.";
 }
 
 function getNomeFumetto($nome, $numero){
@@ -279,8 +285,8 @@ function printSerie($IdSerie){
 function printSerieInfo($serie){
 	require_once(SCRIPT_PATH."DbConn.php");
 	echo "<div id=\"serieInfo\">";
-	echo "<img src=\"".getSeriePath($serie["nome"].".jpg")."\" />";
-	echo "<div id=\"nome\">".$serie['nome']."</div>";
+	echo "<img src=\"".getSeriePath("Serie_".$serie["nome"].".jpg")."\" />";
+	echo "<div id=\"nome\"><a href='serie.php?".$serie['nome']."'>".$serie['nome']."</a></div>";
 	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
 	echo "<div id=\"elencoFumetti\">";
 	printElencoFumetti($serie["nome"]);
@@ -319,7 +325,7 @@ function printUtenti(){
 	$utenti = getUsers(0, 100);
 	echo "<div id=\"elencoUtenti\">\n\t<table border=1>";
 	?>
-	<tr><th>Attivo</th><th>Username</th><th>Nome</th><th>Cognome</th><th>e-Mail</th><th>Ban</th><th>Salva</th></tr>
+	<tr><th>Att.</th><th>Username</th><th>Nome</th><th>Cognome</th><th>e-Mail</th><th>Permessi</th><th>Ban</th><th>Salva</th></tr>
 	<?php
 	for ($j = 0; $j < mysql_num_rows($utenti); $j++){
 			$utente = mysql_fetch_array($utenti);
@@ -349,6 +355,18 @@ function printRow($utente){
 	
 	//eMail
 	echo "<td><div id='email'>".$utente["email"]."</div></td>\n";
+	
+	//Permessi
+	if(PRIVILEGI == "administrator"){
+		?> <td><div id="privilegi"><select name="privilegi">
+				<option value="guest" <?php if($utente["privilegi"] == "guest") echo "selected"; ?>>Guest</option>
+				<option value="manager" <?php if($utente["privilegi"] == "manager") echo "selected"; ?>>Manager</option>
+				<option value="administrator" <?php if($utente["privilegi"] == "administrator") echo "selected"; ?>>Administrator</option>
+				</select></td>
+		<?php
+		}
+	else
+		echo "<td><div id=\"permessi\">".$utente["privilegi"]."</td>";
 	
 	//Bannato?
 	if(userIsBanned($utente["banned"])){
