@@ -368,6 +368,7 @@ function printFumettoLittle($fumetto){
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
 	echo '<div id="nome">'.getNomeFumetto($fumetto['nome'], $fumetto['volume'])."</div>";
 	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
+	echo '<div id="comandiFumetto">'.printMenu("Controlli fumetti").'</div>';
 	echo '</div>';
 	
 }

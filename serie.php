@@ -30,7 +30,24 @@
         		printMenu('Controlli fumetti');
         		printSerieDettagli($serie);
         		//printElencoFumetti($serie);
+        		printCommenti($serie);
         	?>
+        <div id=aggiungiCommento>
+        	<form action=agginungiCommento.php method="post" name=aggiungiCommento>
+        		<fieldset>
+        			<legend>Aggiungi un commento</legend>
+        			<input type="hidden" name=serie value=<?php echo $serie; ?>>
+        			<input type="hidden" name=user value=<?php echo USER; ?>>
+        			<text name=commento>
+        				Inserisci il commento qui...
+        			</text>
+        			<submit value="Inserisci" onclick=checkCommento() >
+        			<noscript>
+        				<input type="submit" value="Inserisci">
+        			</noscript>
+        		</fieldset>
+        	</form>
+        </div>
         	       
         </div>
         
