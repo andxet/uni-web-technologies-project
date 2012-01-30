@@ -25,29 +25,31 @@
             ?>  
         
         <div id="content">
+        <script src="script/funzioniAjax.js"></script>
         	<?php 
         		//Comandi controllo serie
         		printMenu('Controlli fumetti');
         		printSerieDettagli($serie);
         		//printElencoFumetti($serie);
-        		printCommenti($serie);
+        		//printCommenti($serie);
         	?>
-        <div id=aggiungiCommento>
+        <!--
+		<div id=aggiungiCommento>
         	<form action=agginungiCommento.php method="post" name=aggiungiCommento>
         		<fieldset>
         			<legend>Aggiungi un commento</legend>
         			<input type="hidden" name=serie value=<?php echo $serie; ?>>
         			<input type="hidden" name=user value=<?php echo USER; ?>>
-        			<text name=commento>
+        			        			<text name=commento>
         				Inserisci il commento qui...
         			</text>
         			<submit value="Inserisci" onclick=checkCommento() >
         			<noscript>
         				<input type="submit" value="Inserisci">
-        			</noscript>
-        		</fieldset>
+        			</noscript>        		</fieldset>
         	</form>
-        </div>
+        </div>-->
+
         	       
         </div>
         

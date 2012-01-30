@@ -117,7 +117,8 @@ function printTitolo($pagina){
 
 function printHeader(){
 	require_once("config.php");
-	echo "<a href=\"index.php\"><img src=\"".IMAGES_PATH.LOGO_NAME."\" height=\"100px\" alt=\"".SITE_NAME."\">";
+	echo "<a href=\"index.php\"><img src=\"".IMAGES_PATH.LOGO_NAME."\" height=\"100px\" alt=\"".SITE_NAME."\"></a>";
+	echo "<div id=\"avvisoJS\"><noscript>Javascript deve essere abilitato per un corretto funzionamento del sito.</noscript></div>";
 }
 
 function printFooter(){
@@ -141,6 +142,8 @@ function printMenu($nome){
 	require_once('config.php');
 	$menus = getMenu($nome);
 	$menus = mysql_fetch_array($menus);
+	if($menus["count(*)"] == 0)
+		return;
 	echo "<div id=\"".$menus["nomeStile"]."\">";
 	$pagine = getPages($nome);
 	for ($j = 0; $j < mysql_num_rows($pagine); $j++){
@@ -172,13 +175,13 @@ function printUser(){
 }
 
 function nuovaSerieButton(){
-	echo "<a href=aggiungiSerie.php><img src='".ADD_IGM."' />Nuova serie</a>";
+	echo "<a href=aggiungiSerie.php><img src='".ADD_IMG."' />Nuova serie</a>";
 }
 
 function nuovoFumettoButton(){
 	$serie = $_GET["serie"];
 	//echo $serie;
-	echo "<a href=\"aggiungiFumetto.php?serie=".$serie."\"><img src='".ADD_IGM."' />Nuovo fumetto</a>";
+	echo "<a href=\"aggiungiFumetto.php?serie=".$serie."\"><img src='".ADD_IMG."' />Nuovo fumetto</a>";
 	/*?>
 	
 	<a href=aggiungiFumetto.php?serie=<?php echo $serie; ?> ><img src='<?php echo ADD_IGM; ?>' />Nuovo fumetto</a>
@@ -319,7 +322,7 @@ function printSerieDettagli($IdSerie){
 function printSerieInfo($serie){
 	require_once(SCRIPT_PATH."DbConn.php");
 	echo "<div id=\"serieInfo\">";
-	echo "<img src=\"".getSeriePath("Serie_".$serie["nome"].".jpg")."\" />";
+	echo "<img src=\"".getSeriePath("Serie_".$serie["idSerie"].".jpg")."\" />";
 	echo "<div id=\"nome\"><a href='serie.php?serie=".$serie['nome']."'>".$serie['nome']."</a></div>";
 	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
 	echo "<div id=\"elencoFumetti\">";
@@ -335,7 +338,7 @@ function printSerieInfo($serie){
 function printSerieInfoDettagli($serie){
 	require_once(SCRIPT_PATH."DbConn.php");
 	echo "<div id=\"serieInfo\">";
-	echo "<img src=\"".getSeriePath("Serie_".$serie["nome"].".jpg")."\" />";
+	echo "<img src=\"".getSeriePath("Serie_".$serie["idSerie"].".jpg")."\" />";
 	echo "<div id=\"nomeSerie\">".$serie['nome']."</div>";
 	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
 	echo "<div id=\"elencoFumetti\">";
@@ -363,12 +366,15 @@ function printFumettoLittle($fumetto){
 	if($fumetto['dataUscita'] > time())
 		return;
 	echo '<div id="fumettoLittle">';
-	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg"."\" />";
+	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["numSerie"]."_".$fumetto["volume"].".jpg"."\" />";
 	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
 	echo '<div id="nome">'.getNomeFumetto($fumetto['nome'], $fumetto['volume'])."</div>";
-	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
-	echo '<div id="comandiFumetto">'.printMenu("Controlli fumetti").'</div>';
+	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';?>
+	<div id="comandiFumetto">
+		<img src="<?php echo ADD_IMG; ?>" alt="Aggiungi alla lista dei fumetti che stai leggendo!" onclick=aggiungiLista(<?php echo $fumetto["idVolume"]; ?>,this); />
+	<?php
+	echo printMenu("Controlli fumetto").'</div>';
 	echo '</div>';
 	
 }

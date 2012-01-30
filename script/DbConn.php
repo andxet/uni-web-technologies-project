@@ -42,7 +42,7 @@ function getPageInfo($page){
 }
 
 function getMenu($menu){
-	$Q_GET_MENU = "SELECT * FROM `Menu` WHERE `nome` = '$menu'";
+	$Q_GET_MENU = "SELECT *, count(*) FROM `Menu` WHERE `nome` = '$menu'";
 	return eseguiQuery($Q_GET_MENU);
 }
 
@@ -105,7 +105,7 @@ function getFumetti($serie){/*
   		$fine = $temp;
 	}*/
 
-	$Q_GET_COMICS = "SELECT * FROM `Fumetti` WHERE `idSerie` = '$serie' ORDER BY volume";
+	$Q_GET_COMICS = "SELECT *, `Serie`.`idSerie` AS `numSerie` FROM `Fumetti`, `Serie` WHERE `Fumetti`.`idSerie` = '$serie' AND `Fumetti`.`idSerie`=`Serie`.`idSerie` ORDER BY volume";
 	return eseguiQuery($Q_GET_COMICS);
 }
 
@@ -218,7 +218,7 @@ function aggiungiSerie($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
-	if(!uploadSerieImg($vett["nome"]))
+	if(!uploadSerieImg($vett["idSerie"]))
 		return false;
 	$Q_INSERT_SERIE = "INSERT INTO  `fumezzi`.`Serie` (`nome` , `inCorso`) VALUES ( '".$vett['nome']."', ";
 	if(isset($vett["inCorso"]))
@@ -234,7 +234,7 @@ function aggiungiFumetto($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
-	if(!uploadFumettoImg($vett["serie"].$vett["volume"]))
+	if(!uploadFumettoImg($vett["idSerie"]."_".$vett["volume"]))
 		return false;
 	$Q_ADD_COMIC = "INSERT INTO  `fumezzi`.`Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
 	return eseguiQuery($Q_ADD_COMIC);	
