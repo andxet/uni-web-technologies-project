@@ -1,7 +1,10 @@
 <?php
 	require_once("script/config.php");
 	require_once(SCRIPT_PATH."funzioni.php");
+	require_once(SCRIPT_PATH."form.php");
 	inizializza();
+	$risultati = "";
+	checkForm("cerca");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -22,9 +25,18 @@
             ?>  
         
         <div id="content">
-        	<div id="descrizione">Clicca su un fumetto per indicare che l'hai letto. Lo sfondo diventer&agrave; verde per indicarlo!</div>
-        	 <script src="script/funzioniAjax.js"></script>
-        	<?php printLista(USER); ?>
+        	<script src="script/funzioniAjax.js"></script>
+        	<script src="script/menu.js"></script>
+        	<div id="formCerca">
+        		<?php
+        			stampaForm("cerca"); 
+        		?>
+        	</div>
+        	
+        	<?php
+        		if($risultati != "")
+        			stampaRisultati();
+        	?>
         	       
         </div>
         

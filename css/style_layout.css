@@ -1,7 +1,7 @@
 /* Parti generali */
 
 body, html {
-	background-color: #ffd012;
+	background-image: url(../images/sfondo.jpg);
 	font-family: "Comic Sans MS", Verdana, Arial, sans-serif;
 	padding: 0px;
 	margin: 0px;
@@ -70,6 +70,11 @@ div#user_control {
 	clear: both;
 }
 
+div#user_control #comando{
+	margin-left: 4px;
+	display: inline;
+}
+
 div#navigation {
 	padding-left: 0.5em;
 	border-right-width: 0.1em;
@@ -114,6 +119,7 @@ div#errori {
 }
 
 div#userInfo {
+	margin-bottom: 2px;
 	border-style: solid;
 	border-color: #7492c3;
 	background-color: #9fc8ff;
@@ -177,7 +183,7 @@ div#serieInfo #nomeSerie{
 	float: left;
 }
 
-div#fumetto{
+#fumetto{
 	height: 188px;
 	margin-top: 3px;
 	border-style: solid;
@@ -185,7 +191,15 @@ div#fumetto{
 	background-color: #9fc8ff;
 }
 
-div#fumetto img{
+#fumettoLetto{
+	border-color: #3dbe35;
+	background-color: #afffb4;
+	height: 188px;
+	margin-top: 3px;
+	border-style: solid;
+}
+
+#fumetto img, #fumettoLetto img{
 	float: left;
 	border-color: red;
 	border-style: solid;
@@ -194,24 +208,51 @@ div#fumetto img{
 	list-style-position: outside;
 }
 
-div#fumetto #volume{
+#fumetto #volume, #fumettoLetto #volume{
 	color: #ff0900;
 	font-size: 20px;
 	font-weight: bold;
 }
 
-div#fumetto #nome{
+#fumetto #nome, #fumettoLetto #nome{
 	font-size: 18px;
 }
 
-div#fumetto #comandiFumetto{
+#fumetto #comandiFumetto, #fumettoLetto #comandiFumetto{
 	text-align: right;
 }
 
 
-div#fumetto #comandiFumetto img{
+#fumetto #comandiFumetto img, #fumettoLetto #comandiFumetto img{
 	float: right;
 	text-align: right;
 	border-style: none;
+}
+
+#formCerca{
+	padding: 2px;
+	border-color: red;
+	margin-bottom: 5px;
+	border-style: solid;
+	background-color: silver;
+}
+
+#risultati{
+	background-color: #76a3ff;
+	padding: 2px;
+	margin-bottom: 4px;
+	border-style: solid;
+	border-color: #ff0300;
+	border-width: 1px;
+}
+
+#risultatiElenco{
+	display: none;
+}
+
+#notifiche{
+	display: inline;
+	background-color: #ff0006;
+	color: white;
 }
 

@@ -12,6 +12,7 @@ function setXMLHttpRequest() {
 
 var xhrObj = setXMLHttpRequest();
 
+//Funzioni per aggiungere fumetti alla lista
 function aggiungiLista(fumetto, bottone){
 	var url = "aggiungiLista.php?fumetto=" + fumetto;
 	xhrObj.open("GET", url, true);
@@ -40,7 +41,10 @@ function updatePage(bottone, fumetto, stato) {
 	}
 }
 
+//Funzione usata per rimuovere un fumetto
 function rimuoviListaR(fumetto, bottone){
+	if(!confirm("Sei sicuro di voler eliminare questo fumetto?"))
+		return;
 	var url = "rimuoviLista.php?fumetto=" + fumetto;
 	xhrObj.open("GET", url, true);
 	xhrObj.onreadystatechange = function() { nascondiFumetto(bottone); };
@@ -57,3 +61,55 @@ function nascondiFumetto(bottone) {
 			bottone.parentNode.innerHTML = risp;
 	}
 }
+
+
+//Funzioni per cambiare lo stato di lettura
+function dimenticaLettura(img, fumetto){
+	if(!confirm("Vuoi annullare la lettura di questo fumetto?"))
+		return;
+	var url = "dimenticaFumetto.php?fumetto=" + fumetto;
+	xhrObj.open("GET", url, true);
+	xhrObj.onreadystatechange = function() { dimenticaFumetto(img, fumetto); };
+	xhrObj.send(null);	
+}
+
+
+function dimenticaFumetto(img, fumetto){
+	if (xhrObj.readyState == 4) {
+		var risp = xhrObj.responseText;
+		if (risp == "successo"){
+			//div.innerHTML = '<div id="fumetto" onclick="leggi(this, ' + fumetto + ')">';
+			img.parentNode.id="fumetto";
+			//div.onClick="leggiFumetto(this, "+fumetto+");";
+			//div.onClick = 'leggi(this, ' + fumetto + ')';
+			img.onclick = function(){ leggi(img, fumetto); };
+		}
+		else
+			bottone.parentNode.innerHTML = risp;
+	}
+}
+
+function leggi(img, fumetto){
+	var url = "leggiFumetto.php?fumetto=" + fumetto;
+	xhrObj.open("GET", url, true);
+	xhrObj.onreadystatechange = function() { leggiFumetto(img, fumetto); };
+	xhrObj.send(null);
+}
+
+function leggiFumetto(img, fumetto){
+	if (xhrObj.readyState == 4) {
+		var risp = xhrObj.responseText;
+		if (risp == "successo"){
+			//cambiaSfondoLetto(div);
+			//div.innerHTML = '<div id="fumettoLetto" onclick="dimenticaLettura(this, ' + fumetto + ')">';
+			img.parentNode.id = "fumettoLetto";
+			//div.onClick = function() { dimenticaFumetto(div, fumetto); }
+			//div.onClick = 'dimenticaLettura(this, ' + fumetto + ')';
+			img.onclick = function() {dimenticaLettura(img, fumetto); };
+		}
+		else
+			bottone.parentNode.innerHTML = risp;
+	}
+}
+
+

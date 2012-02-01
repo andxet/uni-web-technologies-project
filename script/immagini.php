@@ -42,7 +42,7 @@ function uploadSerieImg($nomeSerie){
 	global $estensioni_immagini;
 	//echo $_POST['nomefile'];
 	if(salvaImmagine(ORIGINAL_PATH."Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]]))
-		if(creaMiniatura(ORIGINAL_PATH, "Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]], SERIE_PATH, 720, 180))
+		if(creaMiniatura(ORIGINAL_PATH, "Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]], SERIE_PATH, 708, 180))
 			return true;
 	return false;
 }

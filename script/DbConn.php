@@ -323,8 +323,30 @@ function numFumettiPosseduti($user){
 }
 
 function getListaFumetti($user){
-	$query = "SELECT `Serie`.`idSerie`, `Serie`.`nome` AS nomeSerie, `Fumetti`.`nome` AS nomeFum, `Fumetti`.`volume`, `Fumetti`.`idVolume`, `dataUscita` FROM `Serie` INNER JOIN `Fumetti` ON `Serie`.`idSerie` = `Fumetti`.`idSerie` INNER JOIN `Legge` ON `Fumetti`.`idVolume` = `Legge`.`fumetto` WHERE utente='$user' ORDER BY `Serie`.`nome` ASC, `Fumetti`.`volume` ASC";
+	$query = "SELECT `Serie`.`idSerie`, `Serie`.`nome` AS nomeSerie, `Fumetti`.`nome` AS nomeFum, `Fumetti`.`volume`, `Fumetti`.`idVolume`, `dataUscita`, `letto` FROM `Serie` INNER JOIN `Fumetti` ON `Serie`.`idSerie` = `Fumetti`.`idSerie` INNER JOIN `Legge` ON `Fumetti`.`idVolume` = `Legge`.`fumetto` WHERE utente='$user' ORDER BY `Serie`.`nome` ASC, `Fumetti`.`volume` ASC";
 	return eseguiQuery($query);
 }
-	
+
+//Funzioni di ricerca
+//Funzioni per la pagina cerca.php
+function searchFumetti($p){
+	$query = "SELECT *, nome as `nomeFum` FROM `Fumetti` WHERE `Fumetti`.`nome` LIKE '%$p%' OR `volume` like '$p' ORDER BY `nome` ";
+	return eseguiQuery($query);
+
+}
+function searchSerie($p){
+	$query = "SELECT * FROM `Serie` WHERE `nome` LIKE '%$p%' ORDER BY `nome`";
+	return eseguiQuery($query);
+}
+function searchUtenti($p){
+	$par = explode(" ", $p);
+	$query = "SELECT DISTINCT * FROM `Utenti` WHERE ";
+	for($i=0; $i<count($par); $i++){
+		$query.= "`nome` LIKE '%$p%' OR `cognome` LIKE '%$p%' OR `luogo` LIKE '%$p%' OR `username` LIKE '%$p%'";
+		if($i < count($par) - 1)
+			$query .= " OR ";
+		}
+	$query .= " ORDER BY `username`";
+	return eseguiQuery($query);
+}
 ?>

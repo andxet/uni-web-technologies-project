@@ -79,7 +79,7 @@ session_start();
 }
 
 //Funzioni per la gestione dei menu
-function stampa_menu(){
+/*function stampa_menu(){
 	require_once('DbConn.php');
 	require_once('config.php');
 	$menus = getMenus();
@@ -97,7 +97,7 @@ function stampa_menu(){
 		echo "</div>";
 	}
 	
-}
+}*/
 
 function printHead(){
 	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" >\n";
@@ -125,6 +125,7 @@ function printFooter(){
 	echo "<p>Realizzato da <a href=\"mailto:andrea.peretti@studenti.unito.it\">Andrea Peretti</a> - 2012</p>";
 }
 
+/*
 function printUserControl(){
 	require_once("DbConn.php");
 	$uc = getUserControl();
@@ -133,9 +134,9 @@ function printUserControl(){
 		$pagina = mysql_fetch_array($uc);
 		if($pagina['nome'] == "USER")
 			$pagina['nome'] = USER;
-		echo "<button><a href=\"".$pagina['link']."\">".$pagina['nome']."</a></button>";
+		echo "<div id=\"comando\"><a href=\"".$pagina['link']."\">".$pagina['nome']."</a></div>";
 	}
-}
+}*/
 
 function printMenu($nome){
 	require_once('DbConn.php');
@@ -148,13 +149,17 @@ function printMenu($nome){
 	$pagine = getPages($nome);
 	for ($j = 0; $j < mysql_num_rows($pagine); $j++){
 		$pagina = mysql_fetch_array($pagine);
-		if(!in_array(PRIVILEGI, explode(",", $pagina["permessi"]))){
-			continue;}
-		if(file_exists($pagina['link']))
+		if(!in_array(PRIVILEGI, explode(",", $pagina["permessi"])))
+			continue;
+		if(file_exists($pagina['link'])){
+			if($j!=0) echo "|";
+			echo "<div id=\"comando\"><a href=\"".$pagina['link']."\">";
 			if(function_exists($pagina["nome"]))
-				call_user_func($pagina["nome"]);
+				echo call_user_func($pagina["nome"]);
 			else
-				echo "<button><a href=\"".$pagina['link']."\">".$pagina['nome']."</a></button>";
+				echo $pagina['nome'];
+			echo "</a>&nbsp;</div>";
+			}
 	}
 	echo "</div>";
 }
@@ -171,7 +176,7 @@ function ricavaNome($nome){
 }
 
 function printUser(){
-	echo "<button><a href=\"profilo.php\">".USER."</a></button>";;
+	echo "<div id=\"comando\"><a href=\"profilo.php\">".USER."</a></div>";
 }
 
 function nuovaSerieButton(){
@@ -480,6 +485,7 @@ function modificaUtenti($vett){
 
 /////////////////////////////////////////FUNZIONI VARIE
 
+//Funzioni per la pagina serie.php
 function bottoneLista($fumetto){
 	//print_r($fumetto["idSerie"]);
 	global $fumettiPosseduti;
@@ -506,6 +512,7 @@ function bottoneAggiungiLista($fumetto){?>
 	<?php
 }
 
+//Funzioni per la pagina lista.php
 function printLista($user){
 	$fumetti = getListaFumetti($user);
 	if(mysql_num_rows($fumetti) == 0)
@@ -524,10 +531,14 @@ function rimuoviLista($fumetto){?>
 }
 
 function printFumettoL($fumetto){
-	if($fumetto['dataUscita'] > time())
-		return;
-	echo '<div id="fumetto">';
-	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idSerie"]."_".$fumetto["volume"].".jpg"."\" />";
+	if($fumetto["letto"] == "si"){
+		echo '<div id="fumettoLetto" >';
+		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idSerie"].'_'.$fumetto["volume"].'.jpg" onclick="dimenticaLettura(this, '.$fumetto["idVolume"].')"/>';
+		}
+	else{
+		echo '<div id="fumetto" >';
+		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idSerie"].'_'.$fumetto["volume"].'.jpg" onclick="leggi(this, '.$fumetto["idVolume"].')"/>';
+		}
 	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
 	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
@@ -538,4 +549,85 @@ function printFumettoL($fumetto){
 	
 }
 
+//Funzioni per la pagina cerca.php
+function stampaRisultati(){
+	global $risultati;
+	if(!isset($risultati["fumetti"]) || !isset($risultati["serie"]) || !isset($risultati["utenti"])){
+		echo "Errorre nei risultati.";
+		return;
+	}
+	$fumetti = $risultati["fumetti"];
+	$serie = $risultati["serie"];
+	$utenti = $risultati["utenti"];
+	
+	risultatiFumetti($fumetti);
+	risultatiSerie($serie);
+	risultatiUtenti($utenti);
+}
+
+function risultatiSerie($serie){
+	if(mysql_num_rows($serie) == 0)
+		return;
+	?>
+	<div id="risultati"><div onclick="mostraMenu(this.parentNode);"><img src="images/frecciad.png" />Serie <div id="notifiche">&nbsp;<?php echo mysql_num_rows($serie); ?>&nbsp;</div>
+	</div>
+		<div id="risultatiElenco">
+		<?php
+			for($j = 0; $j < mysql_num_rows($serie); $j++){
+				$s = mysql_fetch_array($serie);
+				printSerieInfo($s);
+				}
+		?>
+		</div>
+	</div>
+	<?php
+}
+
+function risultatiFumetti($fumetti){
+if(mysql_num_rows($fumetti) == 0)
+		return;
+	?>
+	<div id="risultati"><div onclick="mostraMenu(this.parentNode);"><img src="images/frecciad.png" />Fumetti <div id="notifiche">&nbsp;<?php echo mysql_num_rows($fumetti); ?>&nbsp;</div>
+	</div>
+	<div id="risultatiElenco">
+		<?php
+			for($j = 0; $j < mysql_num_rows($fumetti); $j++){
+				$s = mysql_fetch_array($fumetti);
+				printFumetto($s);
+				}
+		?>
+		</div>
+	</div>
+	<?php
+}
+
+function risultatiUtenti($utenti){
+if(mysql_num_rows($utenti) == 0)
+		return;
+	?>
+	<div id="risultati"><div onclick="mostraMenu(this.parentNode);"><img src="images/frecciad.png" />Utenti <div id="notifiche">&nbsp;<?php echo mysql_num_rows($utenti); ?>&nbsp;</div>
+	</div>
+		<div id="risultatiElenco">
+		<?php
+			for($j = 0; $j < mysql_num_rows($utenti); $j++){
+				$s = mysql_fetch_array($utenti);
+				printUserInfo($s);
+				}
+		?>
+		</div>
+	</div>
+	<?php
+}
+
+function printUserInfo($userInfo){
+	require_once(SCRIPT_PATH."DbConn.php");
+	echo "<div id=\"userInfo\">";
+	echo "<img src=\"".getAvatarPath($userInfo['avatar'])."\" />";
+	echo "<div id=\"username\">".$userInfo['username']."</div>";
+	echo "<div id=\"nome\">".$userInfo['nome']."</div>  ";
+	echo "<div id=\"cognome\">&nbsp;".$userInfo['cognome']."</div>";
+	echo "<div id=\"luogo\">".$userInfo['luogo']."</div>";
+	echo "<div id=\"numeroFumetti\">".numFumettiPosseduti($userInfo["username"])." fumetti</div>";
+	echo "</div>";
+}
 ?>

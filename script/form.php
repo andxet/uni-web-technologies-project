@@ -513,4 +513,15 @@ function controlloLogin($pass){
 	}
 }
 
+function cercaCose(){
+	$p = $_POST["parolaChiave"];
+	require_once("DbConn.php");
+	global $risultati;
+	$risultati = array();
+	$risultati["fumetti"] = searchFumetti($p);
+	$risultati["serie"] = searchSerie($p);
+	$risultati["utenti"] = searchUtenti($p);
+	return true;
+}
+
 ?>
