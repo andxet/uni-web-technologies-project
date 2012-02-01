@@ -96,29 +96,29 @@
 					break;
 					
 				/////////Campo submit	
-				case 'submit':?>
+				case 'submit':/*?>
 					<script type="text/javascript">
 					<!--
 					document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>"onclick="checkForm();"><?php echo $field['descrizione']; ?></button>');
 					// -->
 					</script>
-					<noscript>
+					<noscript>*/?>
 						<input type=submit name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>">
-					</noscript><?php
+					<?php //</noscript><?php
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
 				break;
 				
 				//////////Campo reset
-				case 'reset':?>
+				case 'reset':/*?>
 					<script type="text/javascript">
 					<!--
 					document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>"onclick="confermaEliminazione();"><?php echo $field['descrizione']; ?></button>');
 					// -->
 					</script>
-					<noscript>
+					<noscript>*/?>
 						<input type=reset name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>">
-					</noscript><?php
+					<?php //</noscript><?php
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
 				break;

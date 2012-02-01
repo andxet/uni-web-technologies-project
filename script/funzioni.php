@@ -246,9 +246,10 @@ function userInfo($user){
 	echo "<div id=\"userInfo\">";
 	echo "<img src=\"".getAvatarPath($userInfo['avatar'])."\" />";
 	echo "<div id=\"username\">".$userInfo['username']."</div>";
-	echo "<div id=\"nome\">".$userInfo['nome']."</div>";
-	echo "<div id=\"cognome\">".$userInfo['cognome']."</div>";
+	echo "<div id=\"nome\">".$userInfo['nome']."</div>  ";
+	echo "<div id=\"cognome\">&nbsp;".$userInfo['cognome']."</div>";
 	echo "<div id=\"luogo\">".$userInfo['luogo']."</div>";
+	echo "<div id=\"numeroFumetti\">".numFumettiPosseduti(USER)." fumetti</div>";
 	echo "</div>";
 }
 
@@ -279,8 +280,8 @@ function getNomeFumetto($nome, $numero){
 	else return $nome;
 }
 
-function getFumettoLittlePath($nome){
-	if(is_file(FUMETTI_LITTLE_PATH.$nome))
+function getFumettoPath($nome){
+	if(is_file(FUMETTI_PATH.$nome))
 		return FUMETTI_PATH.$nome;
 	else
 		return DEFAULTS_PATH.DEFAULT_FUMETTO;
@@ -296,16 +297,16 @@ function printSeries(){
 		echo "Non ci sono serie. Ritorna tra un po'!";
 	for ($j = 0; $j < mysql_num_rows($series); $j++){
 			$serie = mysql_fetch_array($series);
-			printSerie($serie["nome"]);
+			printSerieInfo($serie);
 		}
 }
 
-function printSerie($IdSerie){
-	require_once("DbConn.php");
-	$serie = mysql_fetch_array(getSerie($IdSerie));
-	if(!$serie)
-		echo "Non esiste nessuna serie con questo nome: $IdSerie.";
-	else
+function printSerie($serie){
+	//require_once("DbConn.php");
+	//$serie = mysql_fetch_array(getSerie($IdSerie));
+	//if(!$serie)
+		//echo "Non esiste nessuna serie con questo nome: $IdSerie.";
+	//else
 		printSerieInfo($serie);	
 }
 
@@ -322,16 +323,16 @@ function printSerieDettagli($IdSerie){
 function printSerieInfo($serie){
 	require_once(SCRIPT_PATH."DbConn.php");
 	echo "<div id=\"serieInfo\">";
-	echo "<img src=\"".getSeriePath("Serie_".$serie["idSerie"].".jpg")."\" />";
-	echo "<div id=\"nome\"><a href='serie.php?serie=".$serie['nome']."'>".$serie['nome']."</a></div>";
+	echo "<a href='serie.php?serie=".$serie['idSerie']."'><img src=\"".getSeriePath("Serie_".$serie["idSerie"].".jpg")."\" />";
+	echo "<div id=\"nomeSerie\">".$serie['nome']."</a></div>";
 	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
 	echo "<div id=\"elencoFumetti\">";
 	//printElencoFumetti($serie["nome"]);
-	$numFumetti = mysql_fetch_array(getSerieComicNum($serie["nome"]));
-	if($numFumetti[0] == 0)
+	$numFumetti = getSerieComicNum($serie["idSerie"]);
+	if($numFumetti == 0)
 		echo "Non sono ancora stati inseriti fumetti per questa serie.";
 	else
-		echo $numFumetti[0]." volumi!";
+		echo $numFumetti." volumi!";
 	echo "</div></div>";
 }
 
@@ -339,11 +340,12 @@ function printSerieInfoDettagli($serie){
 	require_once(SCRIPT_PATH."DbConn.php");
 	echo "<div id=\"serieInfo\">";
 	echo "<img src=\"".getSeriePath("Serie_".$serie["idSerie"].".jpg")."\" />";
-	echo "<div id=\"nomeSerie\">".$serie['nome']."</div>";
-	echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
+	//echo "<div id=\"nomeSerie\">".$serie['nome']."</div>";
+	//echo "<div id=\"inCorso\">".getInCorsoValue($serie["inCorso"])."</div>";
+	echo "</div>";
 	echo "<div id=\"elencoFumetti\">";
-	printElencoFumetti($serie["nome"]);
-	echo "</div></div>";
+	printElencoFumetti($serie["idSerie"]);
+	echo "</div>";
 }
 
 function printElencoFumetti($serie){
@@ -352,29 +354,27 @@ function printElencoFumetti($serie){
 	echo '<div id="fumettiInfo">';
 	//if(mysql_num_rows($fumetti) == 0)
 		//echo "Non esistono ancora fumetti per questa serie.";
-	print mysql_num_rows($fumetti);
+	//print mysql_num_rows($fumetti);
 	for ($j = 0; $j < mysql_num_rows($fumetti); $j++){
 			$fumetto = mysql_fetch_array($fumetti);
-			printFumettoLittle($fumetto);
+			printFumetto($fumetto);
 		}
-	if($j == LIST_FUMETTI_LIMIT)
-		echo "<a href=\"serie.php?".$serie["nome"].">Visualizza tutti</a>";
+	//if($j == LIST_FUMETTI_LIMIT)
+	//	echo "<a href=\"serie.php?".$serie["nome"].">Visualizza tutti</a>";
 	echo '</div>';
 }
 
-function printFumettoLittle($fumetto){
+function printFumetto($fumetto){
 	if($fumetto['dataUscita'] > time())
 		return;
-	echo '<div id="fumettoLittle">';
-	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["numSerie"]."_".$fumetto["volume"].".jpg"."\" />";
+	echo '<div id="fumetto">';
+	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idSerie"]."_".$fumetto["volume"].".jpg"."\" />";
 	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
-	echo '<div id="nome">'.getNomeFumetto($fumetto['nome'], $fumetto['volume'])."</div>";
-	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';?>
-	<div id="comandiFumetto">
-		<img src="<?php echo ADD_IMG; ?>" alt="Aggiungi alla lista dei fumetti che stai leggendo!" onclick=aggiungiLista(<?php echo $fumetto["idVolume"]; ?>,this); />
-	<?php
-	echo printMenu("Controlli fumetto").'</div>';
+	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
+	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
+	bottoneLista($fumetto);
+	echo printMenu("Controlli fumetto");
 	echo '</div>';
 	
 }
@@ -479,5 +479,63 @@ function modificaUtenti($vett){
 }
 
 /////////////////////////////////////////FUNZIONI VARIE
+
+function bottoneLista($fumetto){
+	//print_r($fumetto["idSerie"]);
+	global $fumettiPosseduti;
+	if(!isset($fumettiPosseduti))
+		$fumettiPosseduti = getFumettiPosseduti($fumetto["idSerie"]);
+	//print_r($fumettiPosseduti);
+	if($fumettiPosseduti && in_array($fumetto["idVolume"], $fumettiPosseduti))
+		bottoneRimuoviLista($fumetto["idVolume"]);
+	else
+		bottoneAggiungiLista($fumetto["idVolume"]);
+}
+
+function bottoneRimuoviLista($fumetto){?>
+	<div id="comandiFumetto">
+		<img src="<?php echo BAFFO_IMG; ?>" alt="Rimuovi dalla lista dei fumetti che stai leggendo" onclick=rimuoviLista(<?php echo $fumetto; ?>,this); onmouseover=this.src='<?php echo ANNULLA_IMG; ?>' onmouseout=this.src='<?php echo BAFFO_IMG; ?>' />
+	</div>
+	<?php
+}
+
+function bottoneAggiungiLista($fumetto){?>
+	<div id="comandiFumetto">
+		<img src="<?php echo ADDB_IMG; ?>" alt="Aggiungi alla lista dei fumetti che stai leggendo!" onclick=aggiungiLista(<?php echo $fumetto; ?>,this); />
+	</div>
+	<?php
+}
+
+function printLista($user){
+	$fumetti = getListaFumetti($user);
+	if(mysql_num_rows($fumetti) == 0)
+		echo "Non hai fumetti! Aggiungine <a href=\"list.php\">qua!</a>";
+	for ($j = 0; $j < mysql_num_rows($fumetti); $j++){
+			$fumetto = mysql_fetch_array($fumetti);
+			printFumettoL($fumetto);
+		}
+}
+
+function rimuoviLista($fumetto){?>
+	<div id="comandiFumetto">
+		<img src="<?php echo ANNULLA_IMG; ?>" alt="Rimuovi dalla lista dei fumetti che stai leggendo" onclick=rimuoviListaR(<?php echo $fumetto; ?>,this); />
+	</div>
+	<?php
+}
+
+function printFumettoL($fumetto){
+	if($fumetto['dataUscita'] > time())
+		return;
+	echo '<div id="fumetto">';
+	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idSerie"]."_".$fumetto["volume"].".jpg"."\" />";
+	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
+	echo '<div id="volume">'.$fumetto['volume'].'</div>';
+	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
+	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
+	rimuoviLista($fumetto["idVolume"]);
+	echo printMenu("Controlli fumetto");
+	echo '</div>';
+	
+}
 
 ?>

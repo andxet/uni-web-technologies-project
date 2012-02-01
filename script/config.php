@@ -32,7 +32,10 @@
 	define('ATTIVATO_IMG', DEFAULTS_PATH.'attivato.jpg');
 	define('DISATTIVATO_IMG', DEFAULTS_PATH.'disattivato.jpg');
 	define('ADD_IMG', DEFAULTS_PATH."add.png");
+	define('ADDB_IMG', DEFAULTS_PATH."addb.png");
 	define('EDIT_IMG', DEFAULTS_PATH."edit.png");
+	define('BAFFO_IMG', DEFAULTS_PATH."baffo.png");
+	define('ANNULLA_IMG', DEFAULTS_PATH."annulla.png");
 	//Configurazione delle pagine di default
 	define('LOGIN_PAGE', 'login.php');
 	define('WELCOME_PAGE', 'login.php');

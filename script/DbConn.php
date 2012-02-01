@@ -90,8 +90,11 @@ function getSeries(){
 }
 
 function getSerieComicNum($serie){
-	$Q_COUNT_COMICS = "SELECT COUNT(*) FROM `Fumetti` WHERE `idSerie`=\"$serie\" ";
-	return eseguiQuery($Q_COUNT_COMICS);
+	$Q_COUNT_COMICS = "SELECT count(*) AS num FROM `Fumetti` WHERE `idSerie`=\"$serie\" ";
+	//echo $Q_COUNT_COMICS;
+	$ris = mysql_fetch_array(eseguiQuery($Q_COUNT_COMICS));
+	//print_r ($ris);
+	return $ris["num"];
 }
 
 function getFumetti($serie){/*
@@ -105,12 +108,13 @@ function getFumetti($serie){/*
   		$fine = $temp;
 	}*/
 
-	$Q_GET_COMICS = "SELECT *, `Serie`.`idSerie` AS `numSerie` FROM `Fumetti`, `Serie` WHERE `Fumetti`.`idSerie` = '$serie' AND `Fumetti`.`idSerie`=`Serie`.`idSerie` ORDER BY volume";
+	$Q_GET_COMICS = "SELECT *, `Serie`.`idSerie` AS `numSerie`, `Fumetti`.`nome` AS `nomeFum` FROM `Fumetti`, `Serie` WHERE `Fumetti`.`idSerie` = '$serie' AND `Fumetti`.`idSerie`=`Serie`.`idSerie` ORDER BY volume";
+	//echo $Q_GET_COMICS;
 	return eseguiQuery($Q_GET_COMICS);
 }
 
 function getSerie($idSerie){
-	$Q_GET_COMIC = "SELECT * FROM `Serie` WHERE `nome` = '$idSerie'";
+	$Q_GET_COMIC = "SELECT * FROM `Serie` WHERE `idSerie` = '$idSerie'";
 	return eseguiQuery($Q_GET_COMIC);
 }
 
@@ -218,15 +222,20 @@ function aggiungiSerie($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
-	if(!uploadSerieImg($vett["idSerie"]))
-		return false;
 	$Q_INSERT_SERIE = "INSERT INTO  `fumezzi`.`Serie` (`nome` , `inCorso`) VALUES ( '".$vett['nome']."', ";
 	if(isset($vett["inCorso"]))
 		$Q_INSERT_SERIE .= " 'true' ";
 	else
 		$Q_INSERT_SERIE .= " 'false' ";
 	$Q_INSERT_SERIE .= ");";
-	return eseguiQuery($Q_INSERT_SERIE);
+	$db = dbConnect();
+	$ris = mysql_query($Q_INSERT_SERIE, $db)
+		or die("Query non valida: " . mysql_error());
+	$id = mysql_insert_id();
+	if($ris && !uploadSerieImg($id))
+		return false;
+	else
+		return true;
 }
 
 function aggiungiFumetto($vett){
@@ -234,12 +243,24 @@ function aggiungiFumetto($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
-	if(!uploadFumettoImg($vett["idSerie"]."_".$vett["volume"]))
+	if(!uploadFumettoImg($vett["serie"]."_".$vett["volume"]))
 		return false;
 	$Q_ADD_COMIC = "INSERT INTO  `fumezzi`.`Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
 	return eseguiQuery($Q_ADD_COMIC);	
 }
 
+//Fumzioni per la lista
+function getFumettiPosseduti($serie){
+	$QUERY = "SELECT `idVolume` FROM `Legge`, `Fumetti` WHERE `Legge`.`fumetto`=`Fumetti`.`idVolume` AND `utente`='".USER."' AND `Fumetti`.`idSerie`='$serie'";
+	//echo $QUERY;
+	$ris = array();
+	$qris = eseguiQuery($QUERY);
+	for ($i = 0; $i < mysql_num_rows($qris); $i++){
+		$array = mysql_fetch_array($qris);
+		$ris[] = $array[0];
+		}
+	return $ris;
+}
 
 //////////////////////////////////////////FUNZIONI DI MODIFICA
 
@@ -295,5 +316,15 @@ function eliminaUtente($utente){
 	eseguiQuery($Q_DELETE_USER);
 	}
 
+function numFumettiPosseduti($user){
+	$query = "SELECT count(*) FROM `Legge` WHERE `utente`='$user'";
+	$num = mysql_fetch_row(eseguiQuery($query));
+	return $num[0];
+}
+
+function getListaFumetti($user){
+	$query = "SELECT `Serie`.`idSerie`, `Serie`.`nome` AS nomeSerie, `Fumetti`.`nome` AS nomeFum, `Fumetti`.`volume`, `Fumetti`.`idVolume`, `dataUscita` FROM `Serie` INNER JOIN `Fumetti` ON `Serie`.`idSerie` = `Fumetti`.`idSerie` INNER JOIN `Legge` ON `Fumetti`.`idVolume` = `Legge`.`fumetto` WHERE utente='$user' ORDER BY `Serie`.`nome` ASC, `Fumetti`.`volume` ASC";
+	return eseguiQuery($query);
+}
 	
 ?>
