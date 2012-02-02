@@ -1,12 +1,18 @@
 <?php
     
 function dbConnect(){
+	//print_r(file_exists("script/dbconf.php"));
+	if(file_exists("script/dbconf.php") === false){
+		//echo "sono dbconn!!!!";
+		header("Location: ../install/index.php");}
 	require_once('config.php');
 	
 	$db = mysql_connect(DB_HOST, DB_USER, DB_PASS)
-		or die("Connessione non riuscita: " . mysql_error());
+		//or die("Connessione non riuscita: " . mysql_error());
+		or header("Location: ../install/index.php");
     mysql_select_db(DB_NAME, $db)
-    	or die ("Selezione del database non riuscita: " . mysql_error());
+    	//or die ("Selezione del database non riuscita: " . mysql_error());
+    	or header("Location: ../install/index.php");
     return $db;
 }
 
@@ -222,7 +228,7 @@ function aggiungiSerie($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
-	$Q_INSERT_SERIE = "INSERT INTO  `fumezzi`.`Serie` (`nome` , `inCorso`) VALUES ( '".$vett['nome']."', ";
+	$Q_INSERT_SERIE = "INSERT INTO  `Serie` (`nome` , `inCorso`) VALUES ( '".$vett['nome']."', ";
 	if(isset($vett["inCorso"]))
 		$Q_INSERT_SERIE .= " 'true' ";
 	else
@@ -245,7 +251,7 @@ function aggiungiFumetto($vett){
 	require_once("immagini.php");
 	if(!uploadFumettoImg($vett["serie"]."_".$vett["volume"]))
 		return false;
-	$Q_ADD_COMIC = "INSERT INTO  `fumezzi`.`Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
+	$Q_ADD_COMIC = "INSERT INTO  `Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
 	return eseguiQuery($Q_ADD_COMIC);	
 }
 
@@ -268,7 +274,7 @@ function modificaUtente($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
-	$Q_EDIT_USER = "UPDATE  `fumezzi`.`Utenti` SET  `nome` =  '".$vett["nome"]."', `cognome` =  '".$vett["cognome"]."', `luogo` =  '".$vett["luogo"]."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$Q_EDIT_USER = "UPDATE  `Utenti` SET  `nome` =  '".$vett["nome"]."', `cognome` =  '".$vett["cognome"]."', `luogo` =  '".$vett["luogo"]."' WHERE  `Utenti`.`username` =  '".USER."';";
 	$db = dbConnect();
 	$result = mysql_query($Q_EDIT_USER, $db)
 		or die("Query non valida: " . mysql_error());
@@ -280,7 +286,7 @@ function modificaPassword($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
-	$Q_EDIT_PASSWORD = "UPDATE  `fumezzi`.`Utenti` SET  `password` =  '".md5($vett["password"])."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$Q_EDIT_PASSWORD = "UPDATE  `Utenti` SET  `password` =  '".md5($vett["password"])."' WHERE  `Utenti`.`username` =  '".USER."';";
 	$db = dbConnect();
 	$result = mysql_query($Q_EDIT_PASSWORD, $db)
 		or die("Query non valida: " . mysql_error());
@@ -292,7 +298,7 @@ function modificaMail($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
-	$Q_EDIT_MAIL = "UPDATE  `fumezzi`.`Utenti` SET  `email` =  '".$vett['email']."' WHERE  `Utenti`.`username` =  '".USER."';";
+	$Q_EDIT_MAIL = "UPDATE  `Utenti` SET  `email` =  '".$vett['email']."' WHERE  `Utenti`.`username` =  '".USER."';";
 	$db = dbConnect();
 	$result = mysql_query($Q_EDIT_MAIL, $db)
 		or die("Query non valida: " . mysql_error());
@@ -301,7 +307,7 @@ function modificaMail($vett){
 }
 
 function editUserState($vett){
-	$Q_EDIT_USER = "UPDATE  `fumezzi`.`Utenti` SET ";
+	$Q_EDIT_USER = "UPDATE  `Utenti` SET ";
 	if($vett["ban"] != null)
 		$Q_EDIT_USER .= "`banned` = '".$vett["ban"]."' , ";
 	if(isset($vett["privilegi"]))
@@ -312,7 +318,7 @@ function editUserState($vett){
 
 //Query di eliminazione
 function eliminaUtente($utente){
-	$Q_DELETE_USER = "DELETE FROM `fumezzi`.`Utenti` WHERE `Utenti`.`username` = '$utente'";
+	$Q_DELETE_USER = "DELETE FROM `Utenti` WHERE `Utenti`.`username` = '$utente'";
 	eseguiQuery($Q_DELETE_USER);
 	}
 

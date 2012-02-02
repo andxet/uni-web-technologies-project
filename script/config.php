@@ -1,4 +1,7 @@
 <?php
+	//if(!file_exists("dbconf.php"))
+	//	header("Location: ../install/index.php");
+	include_once("dbconf.php");
 	define('SERVER_FORM_CONTROL', true);//True se il server deve sempre effettuare il controllo dei form
 	define('SITE_NAME', "FumeZZi");
 	define('ATTIVAZIONE_UTENTE_DEFAULT', "false"); //Settare una stringa, "true" o "false"
@@ -7,11 +10,6 @@
 	define('SITE_ICON', "icon.png");
 	define('NUMBER_SERIES_PER_PAGE', 30);
 	define('LIST_FUMETTI_LIMIT', 30);
-	//Configurazioni per il server:
-	define('DB_USER', 'root');
-	define('DB_PASS', 'root');
-	define('DB_HOST', 'localhost');
-	define('DB_NAME', 'fumezzi');
 	//Configurazioni dei path
 	define('SCRIPT_PATH', 'script/');
 	define('CSS_PATH', 'css/');
@@ -53,6 +51,6 @@
 	//Altro
 	$errori = "";
 	
-	//Dimensioni immagine serie: 720 * 180 = h 4 volte la l
+	//Dimensioni immagine serie: 708 * 180 = h 4 volte la l
 	
 ?>

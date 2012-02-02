@@ -5,7 +5,7 @@
 	$fumetto = $_GET["fumetto"];
 	$utente = USER;
 	
-	$QUERY = "UPDATE  `fumezzi`.`Legge` SET  `letto` =  'no', `dataLettura` = NULL WHERE  `Legge`.`utente` =  '$utente' AND  `Legge`.`fumetto` = '$fumetto';";
+	$QUERY = "UPDATE  `Legge` SET  `letto` =  'no', `dataLettura` = NULL WHERE  `Legge`.`utente` =  '$utente' AND  `Legge`.`fumetto` = '$fumetto';";
 	//echo $QUERY;
 	if($errori = eseguiQuery($QUERY))
 		echo "successo";

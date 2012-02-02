@@ -4,7 +4,7 @@
 	inizializza();
 	$fumetto = $_GET["fumetto"];
 	
-	$QUERY = "INSERT INTO  `fumezzi`.`Legge` (`utente` ,`fumetto` ,`letto`) VALUES ('".USER."',  '$fumetto',  'no');";
+	$QUERY = "INSERT INTO  `Legge` (`utente` ,`fumetto` ,`letto`) VALUES ('".USER."',  '$fumetto',  'no');";
 	//echo $QUERY;
 	if($errori = eseguiQuery($QUERY))
 		echo "successo";

@@ -437,7 +437,7 @@ function printRow($utente){
 	//Bannato?
 	if(userIsBanned($utente["banned"])){
 		//echo "<td><div id='isBanned'><img src=\"".BANNATO_IMG."\"></div></td>";
-		echo "<td><div id='ban'>Ban:<select name=ban>\n\t<option value='";
+		echo "<td><div id='ban'><select name=ban>\n\t<option value='";
 		echo time()-1000;
 		echo "'>Togli il ban</option>\n\t<option value=\"";
 		echo $utente["banned"];
