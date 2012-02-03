@@ -34,6 +34,8 @@
         	printUserInfo(getUserInfo($utente), "bottoneUtente"); 
         	if($amico)
         		printLista($utente);
+        	else
+        		echo "<p>Impossibile vedere la lista di questo utente:<br />Questo utente non &egrave; tuo amico oppure deve ancora confermare la tua richiesta di amicizia.</p>";
         	
         ?> 
             	       

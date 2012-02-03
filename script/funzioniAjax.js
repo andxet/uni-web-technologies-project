@@ -33,10 +33,10 @@ function updatePage(bottone, fumetto, stato) {
 	if (xhrObj.readyState == 4) {
 		var risp = xhrObj.responseText;
 		if (risp == "successo" && stato == 1){
-			bottone.parentNode.innerHTML = '<img src="images/defaults/baffo.png" alt="Rimuovi dalla lista dei fumetti che stai leggendo" onclick=rimuoviLista("'+fumetto+'",this); onmouseover="this.src=\'images/defaults/annulla.png\'" onmouseout="this.src=\'images/defaults/baffo.png\'" />';
+			bottone.parentNode.innerHTML = '<img src="images/defaults/baffo.png" alt="Rimuovi dalla lista dei fumetti che stai leggendo" onclick="rimuoviLista(\''+fumetto+'\',this);" onmouseover="this.src=\'images/defaults/annulla.png\'" onmouseout="this.src=\'images/defaults/baffo.png\'" />';
 			}
 		else if(risp == "successo" && stato == 0){
-			bottone.parentNode.innerHTML = '<img src="images/defaults/addb.png" alt="Aggiungi alla lista dei fumetti che stai leggendo" onclick="aggiungiLista("'+fumetto+'",this);" />';	
+			bottone.parentNode.innerHTML = '<img src="images/defaults/addb.png" alt="Aggiungi alla lista dei fumetti che stai leggendo" onclick="aggiungiLista(\''+fumetto+'\',this);" />';	
 			}
 		else
 			bottone.parentNode.innerHTML = risp;
@@ -118,7 +118,7 @@ function leggiFumetto(img, fumetto){
 function aggiungiAmico(amico, bottone){
 	var url = "chiediAmicizia.php?amico=" + amico;
 	xhrObj.open("GET", url, true);
-	xhrObj.onreadystatechange = function() { updatePage(bottone, amico, 1); };
+	xhrObj.onreadystatechange = function() { updatePages(bottone, amico, 1); };
 	xhrObj.send(null);
 }
 
@@ -130,11 +130,11 @@ function aggiungiAmicoR(amico, bottone){
 }
 
 function rimuoviAmico(amico, bottone){
-	if(!confirm("Sei sicuro di voler eliminare"+amico+" dagli amici?"))
+	if(!confirm("Sei sicuro di voler eliminare "+amico+" dagli amici?"))
 		return;
 	var url = "eliminaAmicizia.php?amico=" + amico;
 	xhrObj.open("GET", url, true);
-	xhrObj.onreadystatechange = function() { updatePage(bottone, amico, 0); };
+	xhrObj.onreadystatechange = function() { updatePages(bottone, amico, 0); };
 	xhrObj.send(null);
 }
 
@@ -147,7 +147,7 @@ function rimuoviAmicoR(amico, bottone){
 	xhrObj.send(null);
 }
 
-function updatePage(bottone, amico, stato) {
+function updatePages(bottone, amico, stato) {
 	if (xhrObj.readyState == 4) {
 		var risp = xhrObj.responseText;
 		if (risp == "successo" && stato == 1){

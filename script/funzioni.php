@@ -519,6 +519,14 @@ function bottoneRimuoviAmico($utente){?>
 	<?php
 }
 
+function bottoneRichiestaAmico($utente){?>
+	<div id="comandiAmico">
+		<img src="<?php echo ANNULLA_IMG; ?>" alt="Rifiuta amico" onclick="rimuoviAmicoR('<?php echo $utente; ?>',this);" />
+		<img src="<?php echo BAFFO_IMG; ?>" alt="Aggiungi agli amici!" onclick="aggiungiAmicoR('<?php echo $utente; ?>',this);" />
+	</div>
+	<?php
+}
+
 function bottoneAggiungiAmico($utente){?>
 	<div id="comandiAmico">
 		<img src="<?php echo ADDB_IMG; ?>" alt="Aggiungi agli amici!" onclick="aggiungiAmico('<?php echo $utente; ?>',this);" />
@@ -694,7 +702,7 @@ function printRichiesteAmicizia(){
 		<?php
 			for($j = 0; $j < mysql_num_rows($richieste); $j++){
 				$s = mysql_fetch_array($richieste);
-				printUserInfo($s, "bottoneConfermaAmico");
+				printUserInfo($s, "bottoneRichiestaAmico");
 				}
 		?>
 		</div>
