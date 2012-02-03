@@ -2,7 +2,6 @@
 	require_once("script/config.php");
 	require_once(SCRIPT_PATH."funzioni.php");
 	inizializza();
-	modificaUtenti($_POST);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -19,13 +18,18 @@
     	echo "</div>";
     		printMenu("Controlli utente");
 
-            //printMenu("Menu");
+            printMenu("Menu");
             ?>  
         
-        <div id=contenitoreDentrato>
+        <div id="content">
+        	<script src="script/funzioniAjax.js"></script>
+        	<script src="script/menu.js"></script>
         	
-        	<?php printUtenti(); ?>
-        	       
+        	<?php
+        	printRichiesteAmicizia();
+        	
+        	printAmici();
+        	?>        	       
         </div>
         
   		<div id="footer">

@@ -4,15 +4,15 @@ function dbConnect(){
 	//print_r(file_exists("script/dbconf.php"));
 	if(file_exists("script/dbconf.php") === false){
 		//echo "sono dbconn!!!!";
-		header("Location: ../install/index.php");}
+		header("Location: install/index.php");}
 	require_once('config.php');
 	
 	$db = mysql_connect(DB_HOST, DB_USER, DB_PASS)
 		//or die("Connessione non riuscita: " . mysql_error());
-		or header("Location: ../install/index.php");
+		or header("Location: install/index.php");
     mysql_select_db(DB_NAME, $db)
     	//or die ("Selezione del database non riuscita: " . mysql_error());
-    	or header("Location: ../install/index.php");
+    	or header("Location: install/index.php");
     return $db;
 }
 
@@ -74,7 +74,7 @@ function getUsers($inizio, $fine){
   		$fine = $temp;
 	}
 
-	$Q_GET_USERS = "SELECT * FROM Utenti LIMIT $inizio, $fine";
+	$Q_GET_USERS = "SELECT * FROM Utenti"; // LIMIT $inizio, $fine";
 	return eseguiQuery($Q_GET_USERS);
 }
 
@@ -274,6 +274,10 @@ function modificaUtente($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
+	require_once("immagini.php");
+	if(fileIsSet())
+		if(!uploadAvatarImg(USER))
+			return false;
 	$Q_EDIT_USER = "UPDATE  `Utenti` SET  `nome` =  '".$vett["nome"]."', `cognome` =  '".$vett["cognome"]."', `luogo` =  '".$vett["luogo"]."' WHERE  `Utenti`.`username` =  '".USER."';";
 	$db = dbConnect();
 	$result = mysql_query($Q_EDIT_USER, $db)
@@ -354,5 +358,35 @@ function searchUtenti($p){
 		}
 	$query .= " ORDER BY `username`";
 	return eseguiQuery($query);
+}
+
+function getRichiesteAmicizia($user){
+	$q = "SELECT * FROM `Richieste` JOIN `Utenti` ON `Richieste`.`richiedente`=`Utenti`.`username` WHERE `amico` = '$user' AND `richiedente` NOT IN (SELECT `amico` FROM `Richieste` WHERE `richiedente` = '$user');";
+	return eseguiQuery($q);
+}
+	
+function getAmiciDb($user){
+	$q = "SELECT `Utenti`.`username`, `Utenti`.`nome`, `Utenti`.`cognome`, `Utenti`.`luogo` FROM `Richieste` AS `r1` JOIN `Richieste` AS `r2` ON `r1`.`amico` = `r2`.`richiedente` JOIN `Utenti` ON `r1`.`amico`=`Utenti`.`username`  WHERE `r1`.`richiedente` = '$user' AND `r1`.`richiedente` = `r2`.`amico` ORDER BY `Utenti`.`username`; ";
+	//echo $q;
+	return eseguiQuery($q);
+}
+
+function getRichieste($user){
+	$q = "SELECT `amico` FROM `Richieste` WHERE `richiedente` = '$user';";
+	$r = eseguiQuery($q);
+	$c = array();
+	for ($j = 0; $j < mysql_num_rows($r); $j++){
+		$arr = mysql_fetch_array($r);
+		$c[] = $arr[0];
+		}
+	return $c;
+}
+
+function isAmico($utente, $diUtente){
+	$q1 = "SELECT * FROM `Richieste` WHERE `amico` = '$utente' AND `richiedente` = '$diUtente'";
+	$q2 = "SELECT * FROM `Richieste` WHERE `amico` = '$diUtente' AND `richiedente` = '$utente'";
+	$r1 = mysql_num_rows(eseguiQuery($q1));
+	$r2 = mysql_num_rows(eseguiQuery($q2));
+	return (($r1 + $r2) == 2);
 }
 ?>

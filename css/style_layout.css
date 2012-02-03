@@ -32,6 +32,8 @@ h2 {
 
 /* Parti del layout */
 div#container {
+	width: 960px;
+	min-width: 960px;
 	border-bottom-width: 2px;
 	border-left-width: 2px;
 	border-right-width: 2px;
@@ -39,7 +41,6 @@ div#container {
 	margin-right: auto;
 	margin-top: 0;
 	background-color: #1ebeff;
-	width: 960px;
 	text-align: left;
     border-left: solid red;
     border-right: solid red;
@@ -66,7 +67,9 @@ div#header {
 	text-align: center;
 }
 
-div#user_control {
+#user_control {
+	padding-bottom: 5px;
+	padding-top: 5px;
 	border-width: 1px;
 	border-color: #ff0600;
 	border-style: solid;
@@ -76,14 +79,14 @@ div#user_control {
 }
 
 div#user_control #comando{
-	margin-left: 4px;
+	margin-left: 10px;
 	display: inline;
 }
 
 div#navigation {
+	border-right-color: #ff0300;
 	padding-left: 0.5em;
 	border-right-width: 0.1em;
-	border-right-color: black;
 	border-right-style: solid;
 	float:left;
 	width: 13em;
@@ -123,27 +126,33 @@ div#errori {
 	color: red;
 }
 
+#comando{
+	margin: 3px;
+}
+
 div#userInfo {
-	margin-bottom: 2px;
+	margin-top: 3px;
+	min-height: 90px;
 	border-style: solid;
 	border-color: #7492c3;
 	background-color: #9fc8ff;
 }
 
-div#userInfo img {
+#datiUtente{
+	max-width: 620px;
+}
+
+#userInfo img {
 	float: left;
 	border-color: red;
 	border-style: solid;
 	border-width: 1px;
 	margin: 0.3em;
 	list-style-position: outside;
-	height: 80px;
-	width: 80px;
 }
 
 div#userInfo #username {
 	font-weight: bold;
-	clear: right;
 	color: #ff0c00;
 }
 
@@ -156,11 +165,42 @@ div#userInfo #cognome{
 	display: inline;
 }
 
+#userInfo #comandiAmico img{
+	float: right;
+	margin-top: 23px;
+	border-style: none;
+	display: marker;
+}
+
+#elencoUtenti{
+	width: 720px;
+}
+
 table{
+	background-color: #edff5a;
+	min-width: 720px;
+	width: 720px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #ff0600;
+	border-collapse: separate;
 	max-width: 720px;
 }
 
-div#controlliSerie, div#controlliFumetti{
+td{
+	border-width: 1px;
+	border-style: solid;
+	border-color: red;
+}
+
+#intRisultati{
+	margin-bottom: 2px;
+	padding: 3px;
+	border-width: 2px;
+	border-style: outset;
+}
+
+#controlliSerie, #controlliFumetti{
 	text-align: center;
 	border-style: dashed;
 	border-color: red;
@@ -169,16 +209,16 @@ div#controlliSerie, div#controlliFumetti{
 	background-color: #b5ceff;
 }
 
-div#serieInfo{
-	margin-bottom: 4px;
+#serieInfo{
+	margin-top: 3px;
 	text-align: right;
 	background-color: #e6cb00;
-	width: 720px;
+	width: 702px;
 	border-style: outset;
 	padding: 3px;
 }
 
-div#serieInfo #nomeSerie{
+#serieInfo #nomeSerie{
 	text-align: left;
 	margin-right: 3px;
 	border-width: 3px;
@@ -224,6 +264,7 @@ div#serieInfo #nomeSerie{
 }
 
 #fumetto #comandiFumetto, #fumettoLetto #comandiFumetto{
+	float: right;
 	text-align: right;
 }
 
@@ -256,8 +297,13 @@ div#serieInfo #nomeSerie{
 }
 
 #notifiche{
+	float: right;
 	display: inline;
 	background-color: #ff0006;
 	color: white;
+}
+
+#contenitoreCentrato{
+	padding: 5px;
 }
 

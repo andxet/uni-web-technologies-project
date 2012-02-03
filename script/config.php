@@ -1,6 +1,10 @@
 <?php
 	//if(!file_exists("dbconf.php"))
 	//	header("Location: ../install/index.php");
+	
+	//Confugurazione per il fuso orario dei computer dell'uni
+	
+	
 	include_once("dbconf.php");
 	define('SERVER_FORM_CONTROL', true);//True se il server deve sempre effettuare il controllo dei form
 	define('SITE_NAME', "FumeZZi");
@@ -8,8 +12,9 @@
 	define('RICOMPILA_CAMPO_PASSWORD', false);
 	define('LOGO_NAME', "logo.png");
 	define('SITE_ICON', "icon.png");
-	define('NUMBER_SERIES_PER_PAGE', 30);
-	define('LIST_FUMETTI_LIMIT', 30);
+	define('SAVE_UPLOAD_ORIGINALS', true);
+	//define('NUMBER_SERIES_PER_PAGE', 30);
+	//define('LIST_FUMETTI_LIMIT', 30);
 	//Configurazioni dei path
 	define('SCRIPT_PATH', 'script/');
 	define('CSS_PATH', 'css/');

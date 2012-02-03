@@ -12,4 +12,7 @@ Nel sito sono stati definiti 3 tipi di utenti:
 
 Per provare le varie tipologie basta effettueare l'accesso con username e password uguale al grado che si desidera. Ad esempio per provare le funzionalità di un Manager, entrare con user: manager e password: manager.
 
+Due utenti si possono ritenere amici quando nella tabella "Richieste" è presente un record di richieste di entrambi gli utenti verso l'altro utente. Questo per implementare le richieste ed i rifiuti di una amicizia.
+La conseguenza di un'amicizia è la possibilità di scambiarsi i messaggi e di vedere le rispettive liste dei fumetti.
+
 Il sito non è autoinstallante, occorre creare il database ed inserire i dati traminte 'database.sql' affinchè funzioni.

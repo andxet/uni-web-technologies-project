@@ -24,7 +24,7 @@
         <div id="content">
         	<?php
         		//stampa_bacheca();
-        		userInfo(USER);
+        		printUserInfo(getUserInfo(USER), null);
         	?>        
         </div>
         

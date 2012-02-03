@@ -40,62 +40,84 @@ function controllaTipoImg($tipo) {
 function uploadSerieImg($nomeSerie){
 	require_once("config.php");
 	global $estensioni_immagini;
-	//echo $_POST['nomefile'];
-	if(salvaImmagine(ORIGINAL_PATH."Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]]))
-		if(creaMiniatura(ORIGINAL_PATH, "Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]], SERIE_PATH, 708, 180))
+	
+	$nomeImg = "Serie_".$nomeSerie.$estensioni_immagini[$_FILES["nomefile"]["type"]];
+	
+	if(salvaImmagine(ORIGINAL_PATH.$nomeImg))
+		if(creaMiniatura(ORIGINAL_PATH, $nomeImg, SERIE_PATH, 701, 175)){
+			if(!SAVE_UPLOAD_ORIGINALS)
+				unlink(ORIGINAL_PATH.$originale);
 			return true;
+			}
 	return false;
 }
 
 function uploadFumettoImg($nomeFumetto){
 	require_once("config.php");
 	global $estensioni_immagini;
-	if(salvaImmagine(ORIGINAL_PATH."Fumetto_".$nomeFumetto.$estensioni_immagini[$_FILES["nomefile"]["type"]]))
-		if(creaMiniatura(ORIGINAL_PATH, "Fumetto_".$nomeFumetto.$estensioni_immagini[$_FILES["nomefile"]["type"]], FUMETTI_PATH, 120, 180))
+	
+	$nomeImg = "Fumetto_".$nomeFumetto.$estensioni_immagini[$_FILES["nomefile"]["type"]];
+	
+	if(salvaImmagine(ORIGINAL_PATH.$nomeImg))
+		if(creaMiniatura(ORIGINAL_PATH, $nomeImg, FUMETTI_PATH, 120, 180)){
+			if(!SAVE_UPLOAD_ORIGINALS)
+				unlink(ORIGINAL_PATH.$originale);
 			return true;
-	else
-		return false;
+			}
+	return false;
 }
+
+function uploadAvatarImg($avatar){
+	require_once("config.php");
+	global $estensioni_immagini;
+	
+	$nomeImg = "Avatar_".$avatar.$estensioni_immagini[$_FILES["nomefile"]["type"]];
+	
+	if(salvaImmagine(ORIGINAL_PATH.$nomeImg))
+		if(creaMiniatura(ORIGINAL_PATH, $nomeImg, AVATAR_PATH, 80, 80)){
+			if(!SAVE_UPLOAD_ORIGINALS)
+				unlink(ORIGINAL_PATH.$originale);
+			return true;
+			}
+	return false;
+}
+
 
 function creaMiniatura($percorsoImmagine, $immagine, $savePath, $width, $height){
-
-require_once('config.php');
-$img = $percorsoImmagine.$immagine;
-$info = pathinfo($img);
-$dest = $savePath.$info['filename'].".jpg"; // directory di salvataggio delle miniature create 
-if(!file_exists($img)){
-	echo "Immagine non esistente…";
-	return;}
-// dimensioni della miniatura da creare 
-//$thumbWidth = $width; // larghezza  
-//$thumbHeight = $heigth; // altezza  
-// livello di compressione della miniatura 
-$thumbComp = 80; 
-
-// creazione dell'immagine della miniatura 
-$thumb = imagecreatetruecolor($width, $height) or die("Impossibile creare la miniatura"); 
-// apertura dell'immagine originale 
-if(!file_exists($savePath)){
-		//echo "creo cartella";
-  		mkdir($savePath);}
-switch($info['extension']){
-	case 'jpg':
-	case '.jpg':
-		$src = imagecreatefromjpeg($img) or die ("Impossibile aprire l'immagine originale"); 
-		break;
-	case 'png':
-	case '.png':
-		$src = imagecreatefrompng($img) or die ("Impossibile aprire l'immagine originale"); 
-		break;
-	case 'gif':
-	case '.gif':
-		$src = imagecreatefromgif($img) or die ("Impossibile aprire l'immagine originale");
-		break;
-}
-// copio l'immagine originale in quella della miniatura ridimensionandola 
-imagecopyresized($thumb, $src, 0, 0, 0, 0, $width, $height, imageSx($src), imageSy($src)) or die("Impossibile ridimensionare l'immagine");
-imagejpeg($thumb, $dest, $thumbComp) or die("Impossibile salvare la miniatura"); 		
-return true;
+	require_once('config.php');
+	$img = $percorsoImmagine.$immagine;
+	$info = pathinfo($img);
+	$dest = $savePath.$info['filename'].".jpg"; // directory di salvataggio delle miniature create 
+	if(!file_exists($img)){
+		echo "Immagine non esistente…";
+		return;}
+	
+	$thumbComp = 80; 
+	
+	// creazione dell'immagine della miniatura 
+	$thumb = imagecreatetruecolor($width, $height) or die("Impossibile creare la miniatura"); 
+	// apertura dell'immagine originale 
+	if(!file_exists($savePath)){
+			//echo "creo cartella";
+	  		mkdir($savePath);}
+	switch($info['extension']){
+		case 'jpg':
+		case '.jpg':
+			$src = imagecreatefromjpeg($img) or die ("Impossibile aprire l'immagine originale"); 
+			break;
+		case 'png':
+		case '.png':
+			$src = imagecreatefrompng($img) or die ("Impossibile aprire l'immagine originale"); 
+			break;
+		case 'gif':
+		case '.gif':
+			$src = imagecreatefromgif($img) or die ("Impossibile aprire l'immagine originale");
+			break;
+	}
+	// copio l'immagine originale in quella della miniatura ridimensionandola 
+	imagecopyresized($thumb, $src, 0, 0, 0, 0, $width, $height, imageSx($src), imageSy($src)) or die("Impossibile ridimensionare l'immagine");
+	imagejpeg($thumb, $dest, $thumbComp) or die("Impossibile salvare la miniatura"); 		
+	return true;
 }
 
 ?>
