@@ -6,6 +6,8 @@
 	
 	
 	include_once("dbconf.php");
+	define('ADMINISTRATOR', "administrator");
+	define('MESSAGGI_MAIL', "messaggi@fumezzi.zz");
 	define('SERVER_FORM_CONTROL', true);//True se il server deve sempre effettuare il controllo dei form
 	define('SITE_NAME', "FumeZZi");
 	define('ATTIVAZIONE_UTENTE_DEFAULT', "false"); //Settare una stringa, "true" o "false"
@@ -39,6 +41,7 @@
 	define('EDIT_IMG', DEFAULTS_PATH."edit.png");
 	define('BAFFO_IMG', DEFAULTS_PATH."baffo.png");
 	define('ANNULLA_IMG', DEFAULTS_PATH."annulla.png");
+	define('MESS_IMG', DEFAULTS_PATH."messaggio.png");
 	//Configurazione delle pagine di default
 	define('LOGIN_PAGE', 'login.php');
 	define('WELCOME_PAGE', 'login.php');

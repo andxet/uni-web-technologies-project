@@ -59,7 +59,7 @@ function getTitolo($pagina){
 }
 
 function getUserInfo($user){
-	$Q_GET_USER_INFO = "SELECT * FROM `Utenti` WHERE `username` = \"$user\"";
+	$Q_GET_USER_INFO = "SELECT * FROM `Utenti` WHERE `username` = '$user'";
 	return mysql_fetch_array(eseguiQuery($Q_GET_USER_INFO));
 }
 
@@ -339,16 +339,16 @@ function getListaFumetti($user){
 
 //Funzioni di ricerca
 //Funzioni per la pagina cerca.php
-function searchFumetti($p){
-	$query = "SELECT *, nome as `nomeFum` FROM `Fumetti` WHERE `Fumetti`.`nome` LIKE '%$p%' OR `volume` like '$p' ORDER BY `nome` ";
+function searchFumetti($p, $ordine){
+	$query = "SELECT *, nome as `nomeFum` FROM `Fumetti` WHERE `Fumetti`.`nome` LIKE '%$p%' OR `volume` like '$p' ORDER BY '$ordine' ";
 	return eseguiQuery($query);
 
 }
-function searchSerie($p){
-	$query = "SELECT * FROM `Serie` WHERE `nome` LIKE '%$p%' ORDER BY `nome`";
+function searchSerie($p, $ordine){
+	$query = "SELECT * FROM `Serie` WHERE `nome` LIKE '%$p%' ORDER BY '$ordine'";
 	return eseguiQuery($query);
 }
-function searchUtenti($p){
+function searchUtenti($p, $ordine){
 	$par = explode(" ", $p);
 	$query = "SELECT DISTINCT * FROM `Utenti` WHERE ";
 	for($i=0; $i<count($par); $i++){
@@ -356,7 +356,7 @@ function searchUtenti($p){
 		if($i < count($par) - 1)
 			$query .= " OR ";
 		}
-	$query .= " ORDER BY `username`";
+	$query .= " ORDER BY `$ordine`";
 	return eseguiQuery($query);
 }
 

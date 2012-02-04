@@ -4,7 +4,9 @@
 	inizializza();
 	if(!isset($_GET["utente"]))
 		header("Location: index.php");
-	$utente = $_GET["utente"]
+	$utente = $_GET["utente"];
+	if($utente == USER)
+		header("Location: impostazioni.php");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>

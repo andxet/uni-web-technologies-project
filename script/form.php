@@ -67,11 +67,12 @@
 		$fields = getFormFields($nomeForm);
 		
 		echo '<div id="errori">'.$errori.'</div>'; 
-		echo "<form method=\"".$form['metodo']."\" name=\"$nomeForm\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
-		echo "<input type=\"hidden\" name=\"jsIsEnabled\" value=\"NO\"/>";
+		echo "<form method='".$form['metodo']."' name='$nomeForm' action='".$_SERVER['PHP_SELF']."' enctype='multipart/form-data'>";
+		echo "<input type='hidden' name='jsIsEnabled' value='NO'/>";
 		$leggende = 0;
 		for ($i = 0; $i < mysql_num_rows($fields); $i++){
 			$field = mysql_fetch_array($fields);
+			echo "\n";
 			switch($field["tipo"]){
 			
 				//////////Campo legend
@@ -103,7 +104,7 @@
 					// -->
 					</script>
 					<noscript>*/?>
-						<input type=submit name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>">
+						<input type=submit name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" />
 					<?php //</noscript><?php
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
@@ -117,7 +118,7 @@
 					// -->
 					</script>
 					<noscript>*/?>
-						<input type=reset name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>">
+						<input type=reset name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" />
 					<?php //</noscript><?php
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
@@ -127,12 +128,19 @@
 					echo $field['descrizione']. ": ";
 					if($field['richiesto'] == 'y')
 						echo '*';
-					echo "<input type=\"".$field['tipo']."\" name=\"".$field['nome']."\" value=\"".getValue($field["valore"])."\"";
+					echo "<input type='".$field['tipo']."' name='".$field['nome']."' value='".getValue($field["valore"])."'";
 					if($field["setPrecedente"] == 'y')
-						echo setPrecedenti($field['nome']) == "true"? "checked" : "";
-					echo "\">";
+						echo setPrecedenti($field['nome']) == "true" ? "checked" : "";
+					echo "'>";
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
+					break;
+				//////////Campo select
+				case 'select':
+					echo $field['descrizione']. ": ";
+					if($field['richiesto'] == 'y')
+						echo '*';
+					echo "<select name='".$field['nome']."' ".getValue($field["valore"])."</select>";//Chiudere il tag '>' nella funzione chiamata!!!
 					break;
 				//////////Altri campi	
 				default:
@@ -149,10 +157,10 @@
 			echo $campo['descrizione']. ": ";
 			if($campo['richiesto'] == 'y')
 				echo '*';
-			echo "<input type=\"".$campo['tipo']."\" name=\"".$campo['nome']."\" value=\"".getValue($campo["valore"])."\"";
+			echo "<input type='".$campo['tipo']."' name='".$campo['nome']."' value='".getValue($campo["valore"]);
 			if($campo["setPrecedente"] == 'y')
 				echo setPrecedenti($campo['nome']);
-			echo "\">";
+			echo "' />";
 			if($campo['aCapo'] == 'y')
 				echo "<br/>";
 		}
@@ -515,13 +523,56 @@ function controlloLogin($pass){
 
 function cercaCose(){
 	$p = $_POST["parolaChiave"];
+	$cosa = $_POST["cosa"];
+	$ordine = $_POST["ordine"];
 	require_once("DbConn.php");
 	global $risultati;
 	$risultati = array();
-	$risultati["fumetti"] = searchFumetti($p);
-	$risultati["serie"] = searchSerie($p);
-	$risultati["utenti"] = searchUtenti($p);
+	switch($cosa){
+		case "tutto":
+			$risultati["fumetti"] = searchFumetti($p, "nome, volume");
+			$risultati["serie"] = searchSerie($p, "nome");
+			$risultati["utenti"] = searchUtenti($p, "username");
+			break;
+		case "fumetti":
+			$risultati["fumetti"] = searchFumetti($p, $ordine);
+			break;
+		case "serie":
+			$risultati["serie"] = searchSerie($p, $ordine);
+			break;
+		case "utenti":
+			$risultati["utenti"] = searchUtenti($p, $ordine);
+			break;
+	}
 	return true;
+}
+
+function getCosaCercare(){
+	$r = "onChange='aggiornaOrdine(this.form.ordine, this.options[this.selectedIndex].value);'>";
+	$r .= "<option value='tutto'>Tutto</option>";
+ 	$r .= "<option value='serie'>Serie</option>";
+ 	$r .= "<option value='fumetti'>Fumetti</option>";
+ 	$r .= "<option value='utenti'>Utenti</option>";
+ 	return $r;
+}
+
+function getComeOrdinare(){
+	return "><option value='nome'>Nome/username</option>";
+	//$r .= "<option value='inCorso'>In corso</option>";
+ 	//$r .= "<option value='nFum'>Numero fumetti</option>";
+ 	//return $r;
+}
+
+
+function cosaCercare($cosa){
+	global $errori;
+	echo $cosa;
+	if($cosa == 'unset'){
+		$errori .= "Non hai specificato <strong>cosa cercare.</strong><br />";
+		return false;
+		}
+	return true;
+		
 }
 
 ?>

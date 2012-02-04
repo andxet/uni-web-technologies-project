@@ -37,7 +37,9 @@
         		*/
         		printSeries();
         		//printPageSelector("Serie");
+        		
         	?>
+        	<p>Non hai trovato quello che cerchi? <a href="scrivi.php?destinatario=<?php echo ADMINISTRATOR ?>">Chiedi di aggiungerlo!</a></p>       
         	       
         </div>
         

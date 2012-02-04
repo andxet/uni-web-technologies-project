@@ -1,10 +1,12 @@
 <?php
 	require_once("script/config.php");
 	require_once(SCRIPT_PATH."funzioni.php");
-	require_once(SCRIPT_PATH."form.php");
 	inizializza();
-	$risultati = "";
-	checkForm("cerca");
+	if(!isset($_POST["destinatario"]) || $_POST["destinatario"] == "" || (!isAmico(USER, $_POST["destinatario"]) && $_POST["destinatario"]!="administrator"))
+		header("Location: amici.php");
+
+	$destinatario = $_POST["destinatario"];
+	$inviato = inviaMail($_POST);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -25,21 +27,14 @@
             ?>  
         
         <div id="content">
-        	<script src="script/funzioniAjax.js"></script>
-        	<script src="script/menu.js"></script>
-        	<script src="script/cerca.js"></script>
-        	<div id="formCerca">
-        		<?php
-        			stampaForm("cerca"); 
-        		?>
-        	</div>
-        	
-        	<?php
-        		if($risultati != "")
-        			stampaRisultati();
-        	?>
+       
+       		<?php
+       			if($inviato){
+       				?><p><h1>Messaggio inviato!</h1></p><?php }
+       				else{
+       				?><p>Errore nell'invio del messaggio! Assicurati di essere amico dell'utente a cui vuoi mandare il messaggio.</p><?php } ?>
         	       
-        </div>
+        </div></div>
         
   		<div id="footer">
        		<?php printFooter(); ?>

@@ -506,6 +506,7 @@ function bottoneUtente($utente){
 
 function bottoneUtenteNascondi($utente){?>
 	<div id="comandiAmico">
+		<a href="scrivi.php?destinatario=<?php echo $utente; ?>"><img src="<?php echo MESS_IMG; ?>" alt="Invia messaggio"></a>
 		<img src="<?php echo BAFFO_IMG; ?>" alt="Rimuovi dagli amici" onclick="rimuoviAmicoR('<?php echo $utente; ?>',this);" onmouseover="this.src='<?php echo ANNULLA_IMG; ?>'" onmouseout="this.src='<?php echo BAFFO_IMG; ?>'" />
 	</div>
 	<?php
@@ -514,6 +515,7 @@ function bottoneUtenteNascondi($utente){?>
 
 function bottoneRimuoviAmico($utente){?>
 	<div id="comandiAmico">
+	<?php if(isAmico(USER, $utente)) echo "<a href='scrivi.php?destinatario=$utente'><img src='".MESS_IMG."' alt='Invia messaggio'></a>"; ?>
 		<img src="<?php echo BAFFO_IMG; ?>" alt="Rimuovi dagli amici" onclick="rimuoviAmico('<?php echo $utente; ?>',this);" onmouseover="this.src='<?php echo ANNULLA_IMG; ?>'" onmouseout="this.src='<?php echo BAFFO_IMG; ?>'" />
 	</div>
 	<?php
@@ -606,19 +608,68 @@ function printFumettoDiAltri($fumetto){
 //Funzioni per la pagina cerca.php
 function stampaRisultati(){
 	global $risultati;
-	if(!isset($risultati["fumetti"]) || !isset($risultati["serie"]) || !isset($risultati["utenti"])){
+	if(!isset($risultati["fumetti"]) && !isset($risultati["serie"]) && !isset($risultati["utenti"])){
 		echo "Errorre nei risultati.";
 		return;
 	}
-	$fumetti = $risultati["fumetti"];
-	$serie = $risultati["serie"];
-	$utenti = $risultati["utenti"];
 	
 	$amici;
 	
-	risultatiFumetti($fumetti);
-	risultatiSerie($serie);
-	risultatiUtenti($utenti);
+	switch($_POST["cosa"]){
+		case "tutto":
+			$fumetti = $risultati["fumetti"];
+			$serie = $risultati["serie"];
+			$utenti = $risultati["utenti"];
+			risultatiFumetti($fumetti);
+			risultatiSerie($serie);
+			risultatiUtenti($utenti);
+			break;
+		case "fumetti":
+			$fumetti = $risultati["fumetti"];
+			if(mysql_num_rows($fumetti) == 0){
+				echo "<p>Nessun risultato trovato.</p>";
+				break;}
+			?>
+			<div id="risultati">
+			<?php
+				for($j = 0; $j < mysql_num_rows($fumetti); $j++){
+					$s = mysql_fetch_array($fumetti);
+					printFumetto($s);
+					}
+			?>
+			</div><?php
+			break;
+		case "serie":
+			$serie = $risultati["serie"];
+			if(mysql_num_rows($serie) == 0){
+			echo "<p>Nessun risultato trovato.</p>";
+				break;}
+			?>
+			<div id="risultati">
+			<?php
+				for($j = 0; $j < mysql_num_rows($serie); $j++){
+					$s = mysql_fetch_array($serie);
+					printSerieInfo($s);
+					}
+			?>
+			</div><?php
+			break;
+		case "utenti":
+			$utenti = $risultati["utenti"];
+			if(mysql_num_rows($utenti) == 0){
+				echo "<p>Nessun risultato trovato.</p>";
+				break;}
+			?>
+			<div id="risultati">
+			<?php
+				for($j = 0; $j < mysql_num_rows($utenti); $j++){
+					$s = mysql_fetch_array($utenti);
+					printUserInfo($s, "bottoneUtente");
+					}
+			?>
+			</div><?php
+			break;
+		}	
 }
 
 function risultatiSerie($serie){
@@ -724,6 +775,20 @@ function printAmici(){
 		?>
 	</div>
 	<?php
+}
+
+function inviaMail($v){
+	$destinatario = getUserInfo($v["destinatario"]);
+	$mailD = $destinatario["email"];
+	$utente = getUserInfo(USER);
+	$mailU = $utente["email"];
+	$messaggio = "<p>Ricevi questo messaggio perch&egrave; sei registrato a ".SITE_NAME.". L'utente <a href='mailto:$mailU'>".USER."</a>Ti ha inviato il seguente messaggio:</p>\n<p>".$v["messaggio"]."</p>";
+	$oggetto = $v["oggetto"];
+	//echo $messaggio;
+	if(mail($mailD, $oggetto, $messaggio))
+		return true;
+	else
+		return false;
 }
 
 ?>
