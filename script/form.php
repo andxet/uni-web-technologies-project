@@ -66,7 +66,9 @@
 		
 		$fields = getFormFields($nomeForm);
 		
-		echo '<div id="errori">'.$errori.'</div>'; 
+		echo '<div id="errori">'.$errori.'</div>';
+		if($form["controlloJS"] != null)
+			echo "<script src='".SCRIPT_PATH."form.js' type='text/javascript'></script>";
 		echo "<form method='".$form['metodo']."' name='$nomeForm' action='".$_SERVER['PHP_SELF']."' enctype='multipart/form-data'>";
 		echo "<input type='hidden' name='jsIsEnabled' value='NO'/>";
 		$leggende = 0;
@@ -97,13 +99,17 @@
 					break;
 					
 				/////////Campo submit	
-				case 'submit':/*?>
-					<script type="text/javascript">
-					<!--
-					document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>"onclick="checkForm();"><?php echo $field['descrizione']; ?></button>');
-					// -->
-					</script>
-					<noscript>*/?>
+				case 'submit':
+					if($form["controlloJS"] != null){
+						?>
+						<script type="text/javascript">
+						<!--
+						document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" onclick="<?php echo $form["controlloJS"]; ?>();"><?php echo $field['descrizione']; ?></button>');
+						// -->
+						</script>
+						<noscript><?php ;
+					}
+					?>
 						<input type=submit name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" />
 					<?php //</noscript><?php
 					if($field['aCapo'] == 'y')
@@ -111,13 +117,9 @@
 				break;
 				
 				//////////Campo reset
-				case 'reset':/*?>
-					<script type="text/javascript">
-					<!--
-					document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>"onclick="confermaEliminazione();"><?php echo $field['descrizione']; ?></button>');
-					// -->
-					</script>
-					<noscript>*/?>
+				case 'reset':
+					if($form["controlloJS"] != null)
+					?>
 						<input type=reset name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" />
 					<?php //</noscript><?php
 					if($field['aCapo'] == 'y')
@@ -154,9 +156,11 @@
 	}
 		     
 	function stampaCampo($campo){
-			echo $campo['descrizione']. ": ";
-			if($campo['richiesto'] == 'y')
-				echo '*';
+			if($campo["tipo"] != "hidden"){
+				echo $campo['descrizione']. ": ";
+				if($campo['richiesto'] == 'y')
+					echo '*';
+				}
 			echo "<input type='".$campo['tipo']."' name='".$campo['nome']."' value='".getValue($campo["valore"]);
 			if($campo["setPrecedente"] == 'y')
 				echo setPrecedenti($campo['nome']);
@@ -208,121 +212,20 @@
 		return $info["email"];
 	}
 	
-	function setSerieGet(){
+	function getSerieIndex(){
 		return $_GET["serie"];
 	}
 	
-	/*
-	$paginaControllo = "newsletter.php";
-	$paginaRegistrazione = "newsletter.php";
-
-	function checkRegistration($vect){
-	$controllo = true;
-	global $errori; $errori = "";
+	function setSerieGet(){
+		global $serie;
+		return $serie["idSerie"];
+	}
 	
-	global $nickname; $nickname = $vect['nickname'];
-	global $mail; $mail = $vect['email'];
-	$controllo = $controllo & controlloUser($nickname);
-	$controllo = $controllo & controlloEmail($mail);
-	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES' && !SERVER_FORM_CONTROL)
-		return $controllo;
+	function setIdVolumeGet(){
+		global $fumetto;
+		return $fumetto["idVolume"];
+	}
 	
-	global $pass; $pass = $vect['pass'];
-	$passName = "Password";
-	global $pass2; $pass2 = $vect['pass2'];
-	$nicknameName = "Nickname";
-	global $nome; $nome = $vect['nome'];
-	$nomeName = "Nome";
-	global $cognome; $cognome = $vect['cognome'];
-	$cognomeName = "Cognome";
-	global $mail; $mail = $vect['email'];
-	$mailName = "eMail";
-	global $luogo; $luogo = $vect['luogo'];
-	$luogoName = "Luogo";
-	
-	//Controllo se i campi sono stati riempiti
-	$controllo = $controllo & isSetted($nickname, $nicknameName);
-	if($controllo)
-		$controllo = $controllo & controlloUser($nickname);
-		
-	$controllo = $controllo & isSetted($pass, $passName);
-	$controllo = $controllo & isSetted($nome, $nomeName);
-	$controllo = $controllo & isSetted($cognome, $cognomeName);
-	
-	//Controllo per le password
-	$controllo = $controllo & checkPassword($pass, $pass2);
-	
-	//Controllo se il nickname
-	
-	//Controllo se i campi nome e cognome hanno lunghezza accettabile
-	$controllo = $controllo & isLong($nickname, $nicknameName);
-	$controllo = $controllo & isLong($nome, $nomeName);
-	$controllo = $controllo & isLong($cognome, $cognomeName);
-	
-	//Controllo se i campi contengono caratteri proibiti
-	$controllo = $controllo & !hasProhibitedChars($nickname, $nicknameName);
-	$controllo = $controllo & !hasProhibitedChars($nome, $nomeName);
-	$controllo = $controllo & !hasProhibitedChars($cognome, $cognomeName);
-	$controllo = $controllo & !hasProhibitedChars($luogo, $luogoName);
-	
-	//controllo se l'e-mail è valida
-	$controllo = $controllo & isMail($mail);
-	return $controllo;
-}
-
-function checkEditProfile($vect){
-	require_once("config.php");
-	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES' && !SERVER_FORM_CONTROL)
-		return true;
-	global $nome; $nome = $vect['nome'];
-	$nomeName = "Nome";
-	global $cognome; $cognome = $vect['cognome'];
-	$cognomeName = "Cognome";
-	global $luogo; $luogo = $vect['luogo'];
-	$luogoName = "Luogo";
-	global $errori; $errori = "";
-	
-	$controllo = true;
-	
-	//Controllo se i campi sono stati riempiti
-	$controllo = $controllo & isSetted($nome, $nomeName);
-	$controllo = $controllo & isSetted($cognome, $cognomeName);
-	
-	//Controllo se il nickname
-	
-	//Controllo se i campi nome e cognome hanno lunghezza accettabile
-	$controllo = $controllo & isLong($nome, $nomeName);
-	$controllo = $controllo & isLong($cognome, $cognomeName);
-	
-	//Controllo se i campi contengono caratteri proibiti
-	$controllo = $controllo & !hasProhibitedChars($nome, $nomeName);
-	$controllo = $controllo & !hasProhibitedChars($cognome, $cognomeName);
-	$controllo = $controllo & !hasProhibitedChars($luogo, $luogoName);
-	
-	return $controllo;
-}*/
-/*
-function checkEditPassword($vect){
-	$controllo = true;
-	global $errori; $errori = "";
-	global $passold; $passold = $vect['passold'];
-	require_once("config.php");
-	
-	$controllo = $controllo & controlloLogin($passold);
-	
-	if(isset($vect['jsIsEnabled']) && $vect['jsIsEnabled'] == 'YES' && !SERVER_FORM_CONTROL)
-		return $controllo;
-		
-	global $pass; $pass = $vect['pass1'];
-	$passName = "Password";
-	global $pass2; $pass2 = $vect['pass2'];
-	
-	$controllo = $controllo & checkPassword($pass, $pass2);
-	
-	return $controllo;
-	
-}*/
-
 function isSetted($campo, $nomeCampo){
 	global $errori;
 	if (($campo == "") || ($campo == null)) {
@@ -573,6 +476,22 @@ function cosaCercare($cosa){
 		}
 	return true;
 		
+}
+
+function valFumettoNome(){
+	global $fumetto;
+	return $fumetto["nome"];
+}
+
+function valFumettoNum(){
+	global $fumetto;
+	return $fumetto["volume"];
+}
+
+function getNomeSerie(){
+	require_once("DbConn.php");
+	global $serie;
+	return $serie["nome"];
 }
 
 ?>

@@ -3,12 +3,15 @@
 	require_once(SCRIPT_PATH."funzioni.php");
 	require_once(SCRIPT_PATH."form.php");
 	inizializza();
-	
-	$fumetto;
-	checkForm("inserisciFumetto");
-	
-	if(isset($_POST["serie"]) && !isset($_GET["serie"]))
-		$_GET["serie"] = '';
+		
+	$serie;
+	checkForm("modificaSerie");
+	if(isset($_POST["idSerie"]))
+		$serie = mysql_fetch_array(getSerie($_POST["idSerie"]));
+	if(isset($_GET["serie"]))
+		$serie = mysql_fetch_array(getSerie($_GET["serie"]));
+	if($serie == null)//Non esiste una serie con questo id
+		header("Location: list.php");
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -30,13 +33,8 @@
             ?>  
         
         <div id="content">
-        	<div id="errori"></div>
-            <?php
-        	if(!isset($_GET["serie"]) && !isset($_POST["serie"]))
-        			echo "Per inserire un fumetto, <a href=list.php>seleziona una serie</a> ed utilizza l'apposito pulsante ( + bianca su sfondo verde)";
-        	else
- 				stampaForm("inserisciFumetto");
- 			?>
+        	
+        	<?php stampaForm("modificaSerie"); ?>
         	       
         </div>
         

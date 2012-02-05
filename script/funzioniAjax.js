@@ -161,4 +161,10 @@ function updatePages(bottone, amico, stato) {
 	}
 }
 
+function confermaEliminaFumetto(){
+	return confirm("Vuoi veramente eliminare questo fumetto?");
+}
 
+function confermaEliminaSerie(){
+	return confirm("Vuoi veramente eliminare questa serie? Tutti i fumetti ad essa associata, e tutti i dati relativi alle letture degli utenti verranno cancellate.");
+}

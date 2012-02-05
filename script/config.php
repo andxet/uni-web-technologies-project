@@ -42,6 +42,7 @@
 	define('BAFFO_IMG', DEFAULTS_PATH."baffo.png");
 	define('ANNULLA_IMG', DEFAULTS_PATH."annulla.png");
 	define('MESS_IMG', DEFAULTS_PATH."messaggio.png");
+	define('CESTINO_IMG', DEFAULTS_PATH."bin.png");
 	//Configurazione delle pagine di default
 	define('LOGIN_PAGE', 'login.php');
 	define('WELCOME_PAGE', 'login.php');

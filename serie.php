@@ -29,6 +29,7 @@
         	<?php 
         		//Comandi controllo serie
         		printMenu('Controlli fumetti');
+        		bottoneGestioneSerie($serie);
         		printSerieDettagli($serie);
         		//printElencoFumetti($serie);
         		//printCommenti($serie);

@@ -120,12 +120,12 @@ function getFumetti($serie){/*
 }
 
 function getSerie($idSerie){
-	$Q_GET_COMIC = "SELECT * FROM `Serie` WHERE `idSerie` = '$idSerie'";
-	return eseguiQuery($Q_GET_COMIC);
+	$Q_GET_SERIES = "SELECT * FROM `Serie` WHERE `idSerie` = '$idSerie'";
+	return eseguiQuery($Q_GET_SERIES);
 }
 
 function getFumetto($idFumetto){
-	$Q_GET_COMIC = "SELECT * FROM `Fumetti` WHERE `idVolume` = '$serie'";
+	$Q_GET_COMIC = "SELECT * FROM `Fumetti` WHERE `idVolume` = '$idFumetto'";
 	return eseguiQuery($Q_GET_COMIC);
 }
 
@@ -197,6 +197,16 @@ function isExistingSeries($user){
 		return false;
 }
 
+function eliminaSerie($serie){
+	$q = "DELETE FROM `Serie` WHERE `Serie`.`idSerie` = '$serie'";
+	return eseguiQuery($q);
+}
+
+function eliminaFumetto($fumetto){
+	$q = "DELETE FROM `Fumetti` WHERE `Fumetti`.`idVolume` = '$fumetto'";
+	return eseguiQuery($q);
+}
+
 
 /////////////////////////////////////////FUNZIONI PER IL FUNZIONAMENTO DEI FORM
 
@@ -249,10 +259,15 @@ function aggiungiFumetto($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
-	if(!uploadFumettoImg($vett["serie"]."_".$vett["volume"]))
-		return false;
 	$Q_ADD_COMIC = "INSERT INTO  `Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
-	return eseguiQuery($Q_ADD_COMIC);	
+	$db = dbConnect();
+	$ris = mysql_query($Q_ADD_COMIC, $db)
+		or die("Query non valida: " . mysql_error());
+	$id = mysql_insert_id();
+	if($ris && !uploadFumettoImg($id))
+		return false;
+	else
+		return true;	
 }
 
 //Fumzioni per la lista
@@ -269,6 +284,44 @@ function getFumettiPosseduti($serie){
 }
 
 //////////////////////////////////////////FUNZIONI DI MODIFICA
+
+function modificaSerie($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	require_once("immagini.php");
+	
+	$idSerie = $vett["idSerie"];
+	$nome = $vett["nome"];
+	if(isset($vett["inCorso"]))
+		$inCorso = "true";
+	else
+		$inCorso = "false";
+	
+	if(fileIsSet())
+		if(!uploadSerieImg($vett["idSerie"]))
+			return false;
+	$q = "UPDATE  `Serie` SET  `nome` =  '$nome', `inCorso` =  '$inCorso' WHERE  `Serie`.`idSerie` = '$idSerie';";
+	return eseguiQuery($q);
+}
+
+function modificaFumetto($vett){
+	if(!isset($vett))
+		return false;
+	require_once("config.php");
+	require_once("immagini.php");
+	
+	$idVolume = $vett["idVolume"];
+	$nome = $vett["nome"];
+	$volume = $vett["volume"];
+	
+	if(fileIsSet())
+		if(!uploadFumettoImg($vett["idVolume"]))
+			return false;
+	
+	$q = "UPDATE  `fumezzi`.`Fumetti` SET  `nome` =  '$nome', `volume` =  '$volume' WHERE  `Fumetti`.`idVolume` ='$idVolume';";
+	return eseguiQuery($q);
+}
 
 function modificaUtente($vett){
 	if(!isset($vett))

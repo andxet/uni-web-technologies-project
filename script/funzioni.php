@@ -348,21 +348,6 @@ function printElencoFumetti($serie){
 	echo '</div>';
 }
 
-function printFumetto($fumetto){
-	if($fumetto['dataUscita'] > time())
-		return;
-	echo '<div id="fumetto">';
-	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idSerie"]."_".$fumetto["volume"].".jpg"."\" />";
-	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
-	echo '<div id="volume">'.$fumetto['volume'].'</div>';
-	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
-	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
-	bottoneLista($fumetto);
-	echo printMenu("Controlli fumetto");
-	echo '</div>';
-	
-}
-
 function printUtenti(){
 	require_once("DbConn.php");
 	$utenti = getUsers(0, 100);
@@ -567,21 +552,38 @@ function rimuoviLista($fumetto){?>
 	<?php
 }
 
+function printFumetto($fumetto){
+	if($fumetto['dataUscita'] > time())
+		return;
+	echo '<div id="fumetto">';
+	echo "<img src=\"".FUMETTI_PATH."Fumetto_".$fumetto["idVolume"].".jpg"."\" />";
+	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
+	echo '<div id="volume">'.$fumetto['volume'].'</div>';
+	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
+	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
+	bottoneGestioneFumetto($fumetto["idVolume"]);
+	bottoneLista($fumetto);
+	//echo printMenu("Controlli fumetto");
+	echo '</div>';
+	
+}
+
 function printFumettoL($fumetto){
 	if($fumetto["letto"] == "si"){
 		echo '<div id="fumettoLetto" >';
-		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idSerie"].'_'.$fumetto["volume"].'.jpg" onclick="dimenticaLettura(this, '.$fumetto["idVolume"].')"/>';
+		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idVolume"].'.jpg" onclick="dimenticaLettura(this, '.$fumetto["idVolume"].')"/>';
 		}
 	else{
 		echo '<div id="fumetto" >';
-		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idSerie"].'_'.$fumetto["volume"].'.jpg" onclick="leggi(this, '.$fumetto["idVolume"].')"/>';
+		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idVolume"].'.jpg" onclick="leggi(this, '.$fumetto["idVolume"].')"/>';
 		}
 	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
 	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
 	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
+	bottoneGestioneFumetto($fumetto["idVolume"]);
 	rimuoviLista($fumetto["idVolume"]);
-	echo printMenu("Controlli fumetto");
+	//echo printMenu("Controlli fumetto");
 	echo '</div>';
 	
 }
@@ -589,18 +591,18 @@ function printFumettoL($fumetto){
 function printFumettoDiAltri($fumetto){
 	if($fumetto["letto"] == "si"){
 		echo '<div id="fumettoLetto" >';
-		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idSerie"].'_'.$fumetto["volume"].'.jpg" "/>';
+		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idVolume"].'.jpg" "/>';
 		}
 	else{
 		echo '<div id="fumetto" >';
-		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idSerie"].'_'.$fumetto["volume"].'.jpg" "/>';
+		echo '<img src="'.FUMETTI_PATH.'Fumetto_'.$fumetto["idVolume"].'.jpg" "/>';
 		}
 	//echo "Fumetto_".$fumetto["idSerie"].$fumetto["volume"].".jpg";
 	echo '<div id="volume">'.$fumetto['volume'].'</div>';
 	echo '<div id="nome">'.getNomeFumetto($fumetto['nomeFum'], $fumetto['volume'])."</div>";
 	echo '<div id="data">Uscito il: '.$fumetto['dataUscita'].'</div>';
 	//rimuoviLista($fumetto["idVolume"]);
-	echo printMenu("Controlli fumetto");
+	//echo printMenu("Controlli fumetto");
 	echo '</div>';
 	
 }
@@ -763,8 +765,10 @@ function printRichiesteAmicizia(){
         	
 function printAmici(){
 	$amici = getAmiciDb(USER);
-	if(mysql_num_rows($amici) == 0)
+	if(mysql_num_rows($amici) == 0){
+		echo "<p>Non hai amici, <a href='cerca.php'>cercali con la funzione cerca!</a></p>";
 		return;
+		}
 	?>
 	<div id="amici">
 		<?php
@@ -789,6 +793,32 @@ function inviaMail($v){
 		return true;
 	else
 		return false;
+}
+
+function bottoneGestioneFumetto($fumetto){
+	if(PRIVILEGI != "manager" && PRIVILEGI != "administrator")
+		return;
+	?>
+	<div id="comandiFumetto" >
+	<a href="eliminaFumetto.php?fumetto=<?php echo $fumetto; ?>" onclick="return confermaEliminaFumetto();" ><img src="<?php echo CESTINO_IMG; ?>" /></a>
+	</div>
+	<div id="comandiFumetto">
+	<a href="modificaFumetto.php?fumetto=<?php echo $fumetto; ?>" ><img src="<?php echo EDIT_IMG; ?>" /></a>
+	</div>
+	
+	<?php
+}
+
+function BottoneGestioneSerie($serie){
+	if(PRIVILEGI != "manager" && PRIVILEGI != "administrator")
+		return;
+	?>
+	<div id="controlliSerie">
+		Operazioni su questa serie: 
+		<a href="eliminaSerie.php?serie=<?php echo $serie; ?>" onclick="return confermaEliminaSerie();"><img src="<?php echo CESTINO_IMG; ?>" /></a>
+	<a href="modificaSerie.php?serie=<?php echo $serie; ?>"><img src="<?php echo EDIT_IMG; ?>" /></a>
+	</div>
+	<?php
 }
 
 ?>

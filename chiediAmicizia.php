@@ -7,7 +7,7 @@
 	if($amico == $user)
 		return "Non puoi chiedere l'amicizia a te stesso!";
 	
-	$QUERY = "INSERT INTO  `fumezzi`.`Richieste` (`richiedente` ,`amico` ,`data`) VALUES ('$user',  '$amico', NOW( ));";
+	$QUERY = "INSERT INTO  `Richieste` (`richiedente` ,`amico` ,`data`) VALUES ('$user',  '$amico', NOW( ));";
 	if($errori = eseguiQuery($QUERY))
 		echo "successo";
 	else
