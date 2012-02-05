@@ -225,7 +225,7 @@ function registraUtente($vett){
 	if(!isset($vett))
 		return false;
 	require_once("config.php");
-	$Q_INSERT_USER = "INSERT INTO `Utenti` (`username`, `nome`, `cognome`, `email`, `luogo`, `avatar`, `banned`, `privilegi`, `attivo`, `password`) VALUES ('".$vett['username']."', '".$vett['nome']."', '".$vett['cognome']."', '".$vett['email']."', '".$vett['luogo']."', NULL, CURRENT_TIMESTAMP, 'guest', '".ATTIVAZIONE_UTENTE_DEFAULT."', '".md5($vett['password'])."');";
+	$Q_INSERT_USER = "INSERT INTO `Utenti` (`username`, `nome`, `cognome`, `email`, `luogo`, `banned`, `privilegi`, `attivo`, `password`) VALUES ('".$vett['username']."', '".$vett['nome']."', '".$vett['cognome']."', '".$vett['email']."', '".$vett['luogo']."', CURRENT_TIMESTAMP, 'guest', '".ATTIVAZIONE_UTENTE_DEFAULT."', '".md5($vett['password'])."');";
 	$db = dbConnect();
 	$result = mysql_query($Q_INSERT_USER, $db)
 		or die("Query non valida: " . mysql_error());
@@ -319,7 +319,7 @@ function modificaFumetto($vett){
 		if(!uploadFumettoImg($vett["idVolume"]))
 			return false;
 	
-	$q = "UPDATE  `fumezzi`.`Fumetti` SET  `nome` =  '$nome', `volume` =  '$volume' WHERE  `Fumetti`.`idVolume` ='$idVolume';";
+	$q = "UPDATE  `Fumetti` SET  `nome` =  '$nome', `volume` =  '$volume' WHERE  `Fumetti`.`idVolume` ='$idVolume';";
 	return eseguiQuery($q);
 }
 

@@ -104,14 +104,14 @@
 						?>
 						<script type="text/javascript">
 						<!--
-						document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" onclick="<?php echo $form["controlloJS"]; ?>();"><?php echo $field['descrizione']; ?></button>');
+						document.write('<button type="button" name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" onclick="<?php echo $form["controlloJS"]; ?>();" ><?php echo $field['descrizione']; ?></button>');
 						// -->
 						</script>
 						<noscript><?php ;
 					}
 					?>
 						<input type=submit name="<?php echo $field['nome']; ?>" value="<?php echo $field['valore']; ?>" />
-					<?php //</noscript><?php
+					</noscript><?php
 					if($field['aCapo'] == 'y')
 						echo "<br/>";
 				break;
