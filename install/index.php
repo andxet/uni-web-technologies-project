@@ -16,7 +16,7 @@
 
     <div id="container">
   	<h1>Procedura di installazione di fumeZZi</h1>
-  	<p>Inserire i dati per la connessione al database. Il database verr&agrave; popolato con il file "db.sql". I dati di esempio sono contenuti nel file "dati.sql" e servono per dare un idea delle funzionalit&agrave; del sito.</p>
+  	<p>Inserire i dati per la connessione al database. Il database verr&agrave; popolato con il file "db.sql", e le impostazioni nel file ../script/dbconf.php</p>
   	<form action="install.php" method="post" name="installForm">
   	<fieldset>
   	<legend>Dati connessione</legend>

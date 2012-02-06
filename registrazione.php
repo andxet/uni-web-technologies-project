@@ -13,68 +13,14 @@
 <body>	
 
     <div id="container">
-  	<h1>Iscriviti a <?php echo SITE_NAME; ?></h1>
-        <!--   
-        <div id="errori">
-      		<?php              		
-      		if(!isset($_POST))
-      			$_POST = array();
-      		$nickname = setPrecedenti('nickname');
-            $nome = setPrecedenti('nome'); 
-            $cognome = setPrecedenti('cognome');
-            $email = setPrecedenti('email');
-            $luogo = setPrecedenti('luogo');
-            //echo $nome.$cognome.$email.$frequenza.$tipo.$commenti;
-            echo $errori;
-      		?>
+  		<h1>Iscriviti a <?php echo SITE_NAME; ?></h1>
 
-        </div>
-        <form method="post" name="modulo" action="<?php echo $_SERVER['PHP_SELF']; ?>" name="modulo">
-            <fieldset>
-            <legend>Credenziali utente</legend>
-            <input type="hidden" name="jsIsEnabled" value="NO">
-            	Nickname:* <input type="text" name="nickname" value=<?php echo '"'.$nickname.'"'; ?>><br />
-            	Password:* <input type="password" name="pass" value=""><br />
-            	Reinserisci la password:* <input type="password" name="pass2" value=""><br />
-            </fieldset>
-            <fieldset>
-            <legend>Informazioni personali</legend>
-                Nome:* <input type="text" name="nome" value=<?php echo '"'.$nome.'"'; ?>><br />
-                Cognome:* <input type="text" name="cognome" value=<?php echo '"'.$cognome.'"'; ?>><br />
-                E-mail:* <input type="text" name="email" value=<?php echo '"'.$email.'"'; ?>><br />
-                Dove abiti? <input type="text" name="luogo" value=<?php echo '"'.$luogo.'"'; ?>><br />
-             </fieldset>
-            * : Campi obbligatori.
-            
-            <script type="text/javascript">
-				<!--
-					document.write('<button type="button" name="subscribe" value="subscribe" onclick="checkRegistrazione();">');
-					document.write('Iscriviti!</button>');
-				//  -->
-				<!-- ///////
-			</script>
-			<noscript>
-				<input type=submit name="subscribe" value="Iscriviti!">
-			</noscript>
-            <script type="text/javascript">
-				<!--
-					document.write('<button type="button" name="cancella" onClick="conferma_eliminazione();">');
-                	document.write('Reset</button>');
-            	//  -->
-            	<!-- ////////
-            </script>
-            <noscript>
-            	<button name="reset"><a href="<?php echo $_SERVER['PHP_SELF']; ?>">
-            	Reset</a></button>
-            </noscript>
-            </p>
-        </form>  -->      
-        
-        <?php stampaForm('registrazione'); ?>
-        
-  		<div id="footer">
-       		<?php printFooter(); ?>
-        </div>      
+		<?php stampaForm('registrazione'); ?>
+	
+    </div>    
+  	<div id="footer">
+       	<?php printFooter(); ?>
+	</div>      
     	
     </div>
 </body>

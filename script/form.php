@@ -1,5 +1,6 @@
 <?php
-	function checkForm($nomeForm){
+	//Funzioni che riguardano la stampa ed il controllo di form, tramite le tabelle "form" e "Campi" del database
+	function checkForm($nomeForm){//Funzione che controlla i dati inseriti in un form specificato
 	if($_POST)
 		if(isset($_POST["jsIsEnabled"]) && controlloForm($nomeForm)){
 			require_once(SCRIPT_PATH."DbConn.php");
@@ -24,12 +25,12 @@
 		require_once("DbConn.php");
 		global $errori;
 		$valido = true;
-		$campi = getFormFields($nomeForm);
+		$campi = getFormFields($nomeForm);//Ottengo i campi del form, con le informazioni sui controlli da effettuare
 		for($i = 0; $i < mysql_num_rows($campi); $i++){
 			$campo = mysql_fetch_array($campi);
-			if(!campoNecessitaControllo($campo["tipo"]))
+			if(!campoNecessitaControllo($campo["tipo"]))//Se non occorrono controlli, si continua
 					continue;
-			if($campo['richiesto'] == 'y')
+			if($campo['richiesto'] == 'y')//Verifico l'inserimento dei dati nel campo, se richiesti
 					if(!isSetted($_POST[$campo["nome"]], $campo["descrizione"])){
 						$valido = false;
 						continue;
@@ -43,8 +44,11 @@
 					}
 					
 				else die("Funzione di $controlli[$j](".$campo['nome'].") non esistente.");
+			
 			}
-			if(!is_null($campo["customFunction"]))//Eseguo una funzione particolare
+			//if($_POST[$campo["nome"]] != null && $campo["controlloInput"] == 'y')
+			//	$_POST[$campo["nome"]] = htmlspecialchars($_POST[$campo["nome"]], ENT_QUOTES);
+			if(!is_null($campo["customFunction"]))//Eseguo una funzione particolare, se richiesta per un campo specifico (esistenza dell'username inserito, ecc.
 				if(function_exists($campo["customFunction"])){
 					if(!isset($_POST[$campo["nome"]]))
 						$_POST[$campo["nome"]] = null;
@@ -56,7 +60,7 @@
 		return $valido;
 	}
 
-	function stampaForm($nomeForm){
+	function stampaForm($nomeForm){//Funzione che stampa il form secondo i dati memorizzati nel database
 		require_once("config.php");
 		global $errori;
 		$form = getForm($nomeForm);

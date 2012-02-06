@@ -436,11 +436,13 @@ function getListaFumetti($user){
 //Funzioni di ricerca
 //Funzioni per la pagina cerca.php
 function searchFumetti($p, $ordine){
+	//$p = htmlspecialchars($p, ENT_QUOTES);
 	$query = "SELECT *, nome as `nomeFum` FROM `Fumetti` WHERE `Fumetti`.`nome` LIKE '%$p%' OR `volume` like '$p' ORDER BY '$ordine' ";
 	return eseguiQuery($query);
 
 }
 function searchSerie($p, $ordine){
+	//$p = htmlspecialchars($p, ENT_QUOTES);
 	$query = "SELECT * FROM `Serie` WHERE `nome` LIKE '%$p%' ORDER BY '$ordine'";
 	return eseguiQuery($query);
 }
@@ -448,6 +450,7 @@ function searchUtenti($p, $ordine){
 	$par = explode(" ", $p);
 	$query = "SELECT DISTINCT * FROM `Utenti` WHERE ";
 	for($i=0; $i<count($par); $i++){
+		//$p = htmlspecialchars($p, ENT_QUOTES);
 		$query.= "`nome` LIKE '%$p%' OR `cognome` LIKE '%$p%' OR `luogo` LIKE '%$p%' OR `username` LIKE '%$p%'";
 		if($i < count($par) - 1)
 			$query .= " OR ";

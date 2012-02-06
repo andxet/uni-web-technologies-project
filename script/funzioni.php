@@ -42,7 +42,7 @@ function isAuthorizedUser($user, $page){
 }
 
 
-function inizializza(){//setta come variabile globale il nome utente
+function inizializza(){//Funzione che verifica se l'utente è autenticato ed ha i permessi per vedere la pagina richiesta, in tal caso setta la variabile globale che contiene lo username dell'utente "USER"
 require_once("config.php");
 // Starting the session 
 session_start(); 
