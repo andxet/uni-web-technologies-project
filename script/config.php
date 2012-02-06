@@ -1,9 +1,10 @@
 <?php
-	//if(!file_exists("dbconf.php"))
-	//	header("Location: ../install/index.php");
+	if(file_exists("script/dbconf.php") === false){
+		//echo "NON ESISTE!!!!";
+		header("Location: install/index.php");}
 	
 	//Confugurazione per il fuso orario dei computer dell'uni
-	
+	date_default_timezone_set('Europe/Rome');
 	
 	include_once("dbconf.php");
 	define('ADMINISTRATOR', "administrator");
@@ -14,7 +15,7 @@
 	define('RICOMPILA_CAMPO_PASSWORD', false);
 	define('LOGO_NAME', "logo.png");
 	define('SITE_ICON', "icon.png");
-	define('SAVE_UPLOAD_ORIGINALS', true);
+	define('SAVE_UPLOAD_ORIGINALS', false);
 	//define('NUMBER_SERIES_PER_PAGE', 30);
 	//define('LIST_FUMETTI_LIMIT', 30);
 	//Configurazioni dei path

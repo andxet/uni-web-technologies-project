@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: 05 feb, 2012 at 11:24 PM
+-- Generato il: 06 feb, 2012 at 01:23 AM
 -- Versione MySQL: 5.5.9
 -- Versione PHP: 5.3.6
 
@@ -140,7 +140,7 @@ CREATE TABLE `Fumetti` (
   `dataUscita` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idVolume`),
   KEY `idSerie` (`idSerie`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=73 ;
 
 --
 -- Dump dei dati per la tabella `Fumetti`
@@ -160,6 +160,43 @@ INSERT INTO `Fumetti` VALUES(19, 10, '', 47, '2012-01-31 16:48:59');
 INSERT INTO `Fumetti` VALUES(20, 10, '', 54, '2012-01-31 16:49:12');
 INSERT INTO `Fumetti` VALUES(21, 10, '', 3, '2012-01-31 17:49:03');
 INSERT INTO `Fumetti` VALUES(22, 10, '', 4, '2012-01-31 17:49:14');
+INSERT INTO `Fumetti` VALUES(34, 10, '', 2, '2012-02-06 00:41:31');
+INSERT INTO `Fumetti` VALUES(35, 10, '', 6, '2012-02-06 00:42:43');
+INSERT INTO `Fumetti` VALUES(36, 10, '', 7, '2012-02-06 00:43:06');
+INSERT INTO `Fumetti` VALUES(37, 10, '', 8, '2012-02-06 00:43:21');
+INSERT INTO `Fumetti` VALUES(38, 10, '', 9, '2012-02-06 00:43:32');
+INSERT INTO `Fumetti` VALUES(39, 15, '', 1, '2012-02-06 00:47:16');
+INSERT INTO `Fumetti` VALUES(40, 15, '', 2, '2012-02-06 00:47:27');
+INSERT INTO `Fumetti` VALUES(41, 15, '', 3, '2012-02-06 00:47:38');
+INSERT INTO `Fumetti` VALUES(42, 15, '', 4, '2012-02-06 00:47:48');
+INSERT INTO `Fumetti` VALUES(43, 15, '', 5, '2012-02-06 00:47:58');
+INSERT INTO `Fumetti` VALUES(44, 15, '', 6, '2012-02-06 00:48:08');
+INSERT INTO `Fumetti` VALUES(45, 15, '', 7, '2012-02-06 00:48:36');
+INSERT INTO `Fumetti` VALUES(46, 15, '', 10, '2012-02-06 00:49:09');
+INSERT INTO `Fumetti` VALUES(47, 15, '', 13, '2012-02-06 00:49:22');
+INSERT INTO `Fumetti` VALUES(48, 21, '', 1, '2012-02-06 00:51:37');
+INSERT INTO `Fumetti` VALUES(49, 21, '', 2, '2012-02-06 00:51:47');
+INSERT INTO `Fumetti` VALUES(50, 21, '', 3, '2012-02-06 00:51:57');
+INSERT INTO `Fumetti` VALUES(51, 21, '', 4, '2012-02-06 00:52:07');
+INSERT INTO `Fumetti` VALUES(52, 21, '', 5, '2012-02-06 00:52:17');
+INSERT INTO `Fumetti` VALUES(53, 21, '', 6, '2012-02-06 00:52:28');
+INSERT INTO `Fumetti` VALUES(54, 21, '', 7, '2012-02-06 00:52:38');
+INSERT INTO `Fumetti` VALUES(55, 21, '', 8, '2012-02-06 00:52:49');
+INSERT INTO `Fumetti` VALUES(56, 21, '', 9, '2012-02-06 00:52:58');
+INSERT INTO `Fumetti` VALUES(57, 21, '', 10, '2012-02-06 00:53:08');
+INSERT INTO `Fumetti` VALUES(58, 26, '', 1, '2012-02-06 01:01:07');
+INSERT INTO `Fumetti` VALUES(59, 26, '', 2, '2012-02-06 01:01:19');
+INSERT INTO `Fumetti` VALUES(60, 26, '', 3, '2012-02-06 01:01:31');
+INSERT INTO `Fumetti` VALUES(61, 26, '', 4, '2012-02-06 01:01:43');
+INSERT INTO `Fumetti` VALUES(62, 26, '', 5, '2012-02-06 01:01:54');
+INSERT INTO `Fumetti` VALUES(63, 26, '', 6, '2012-02-06 01:02:07');
+INSERT INTO `Fumetti` VALUES(64, 26, '', 8, '2012-02-06 01:02:20');
+INSERT INTO `Fumetti` VALUES(65, 26, '', 7, '2012-02-06 01:02:44');
+INSERT INTO `Fumetti` VALUES(66, 26, '', 9, '2012-02-06 01:03:05');
+INSERT INTO `Fumetti` VALUES(67, 26, '', 10, '2012-02-06 01:03:17');
+INSERT INTO `Fumetti` VALUES(68, 26, '', 11, '2012-02-06 01:03:29');
+INSERT INTO `Fumetti` VALUES(70, 26, '', 12, '2012-02-06 01:04:03');
+INSERT INTO `Fumetti` VALUES(71, 26, '', 2, '2012-02-06 01:15:51');
 
 -- --------------------------------------------------------
 
@@ -194,8 +231,14 @@ INSERT INTO `Legge` VALUES('io', 12, 'no', NULL, '2012-02-03 18:02:40');
 INSERT INTO `Legge` VALUES('io', 17, 'no', NULL, '2012-02-02 16:51:38');
 INSERT INTO `Legge` VALUES('io', 18, 'no', NULL, '2012-02-02 16:51:39');
 INSERT INTO `Legge` VALUES('io', 20, 'no', NULL, '2012-02-02 16:51:47');
-INSERT INTO `Legge` VALUES('io', 21, 'no', NULL, '2012-02-02 16:51:36');
-INSERT INTO `Legge` VALUES('io', 22, 'no', NULL, '2012-02-02 16:51:48');
+INSERT INTO `Legge` VALUES('io', 21, 'si', '2012-02-06 00:58:08', '2012-02-02 16:51:36');
+INSERT INTO `Legge` VALUES('io', 22, 'si', '2012-02-06 00:58:08', '2012-02-02 16:51:48');
+INSERT INTO `Legge` VALUES('io', 39, 'si', '2012-02-06 00:58:01', '2012-02-06 00:57:50');
+INSERT INTO `Legge` VALUES('io', 40, 'si', '2012-02-06 00:58:01', '2012-02-06 00:57:51');
+INSERT INTO `Legge` VALUES('io', 41, 'si', '2012-02-06 00:58:02', '2012-02-06 00:57:52');
+INSERT INTO `Legge` VALUES('io', 42, 'si', '2012-02-06 00:58:04', '2012-02-06 00:57:53');
+INSERT INTO `Legge` VALUES('io', 43, 'no', NULL, '2012-02-06 00:57:54');
+INSERT INTO `Legge` VALUES('io', 44, 'no', NULL, '2012-02-06 00:57:55');
 
 -- --------------------------------------------------------
 
@@ -302,7 +345,7 @@ CREATE TABLE `Serie` (
   `inCorso` enum('true','false') NOT NULL,
   PRIMARY KEY (`idSerie`),
   UNIQUE KEY `nome` (`nome`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
 
 --
 -- Dump dei dati per la tabella `Serie`
@@ -311,7 +354,8 @@ CREATE TABLE `Serie` (
 INSERT INTO `Serie` VALUES(1, 'Dylan Dog', 'true');
 INSERT INTO `Serie` VALUES(10, 'Naruto', 'true');
 INSERT INTO `Serie` VALUES(15, 'Deathnote', 'true');
-INSERT INTO `Serie` VALUES(21, 'Bobobo-bo Bo-bobo', 'true');
+INSERT INTO `Serie` VALUES(21, 'Bobobo-bo Bo-bobo', 'false');
+INSERT INTO `Serie` VALUES(26, 'Dragon Ball', 'false');
 
 -- --------------------------------------------------------
 
@@ -340,14 +384,15 @@ CREATE TABLE `Utenti` (
 --
 
 INSERT INTO `Utenti` VALUES('a', 'jlj', 'lkj', 'and.xet@andail.com', 'pp', '2012-01-15 15:39:39', 'guest', 'true', '0cc175b9c0f1b6a831c399e269772661');
-INSERT INTO `Utenti` VALUES('administrator', 'administrator', 'administrator', 'administrator@fumezzi.zz', NULL, '2012-02-04 01:58:59', 'administrator', 'true', '200ceb26807d6bf99fd6f4f0d1ca54d4');
+INSERT INTO `Utenti` VALUES('administrator', 'administrator', 'administrator', 'administrator@fumezzi.zz', NULL, '2012-02-05 23:18:28', 'administrator', 'true', '200ceb26807d6bf99fd6f4f0d1ca54d4');
 INSERT INTO `Utenti` VALUES('b', 'Andrea', 'Peretti', 'and.xet@gmail.com', 'Roasio', '2010-02-12 17:58:34', 'administrator', 'true', '92eb5ffee6ae2fec3ad71c777531578f');
 INSERT INTO `Utenti` VALUES('c', 'Andrea', 'Peretti', 'io@me.commm', 'Roasio', '2010-01-12 17:42:19', 'administrator', 'true', '4a8a08f09d37b73795649038408b5f33');
 INSERT INTO `Utenti` VALUES('d', 'io', 'me', 'and.xet@gmail.coml', 'tu', '2010-02-12 17:58:45', 'guest', 'true', '8277e0910d750195b448797616e091ad');
 INSERT INTO `Utenti` VALUES('e', 'Iooooo', 'tuoo', 'mango@signore.deimanghi', 'oo', '2010-02-12 17:58:29', 'guest', 'true', 'e1671797c52e15f763380b45e841ec32');
 INSERT INTO `Utenti` VALUES('guest', 'guest', 'guest', 'guest@fumezzi.zz', '', '2012-02-02 15:30:44', 'guest', 'true', '084e0343a0486ff05530df6c705c8bb4');
 INSERT INTO `Utenti` VALUES('io', 'io', 'meo', 'io@mee.ittt', 'Timbuktu', '2010-02-12 19:13:30', 'administrator', 'true', '6e6bc4e49dd477ebc98ef4046c067b5f');
-INSERT INTO `Utenti` VALUES('ioo', 'kk', 'kk', 'aaaa@aaaaa.lo', '', '2012-02-05 22:45:12', 'guest', 'false', '6e6bc4e49dd477ebc98ef4046c067b5f');
+INSERT INTO `Utenti` VALUES('ioo', 'kk', 'kk', 'aaaa@aaaaa.lo', '', '2012-02-05 22:45:12', 'guest', 'true', '6e6bc4e49dd477ebc98ef4046c067b5f');
+INSERT INTO `Utenti` VALUES('manager', 'manager', 'manager', 'manager@fumezzi.zz', '', '2012-02-06 00:24:55', 'manager', 'true', '1d0258c2440a8d19e716292b231e3190');
 
 --
 -- Limiti per le tabelle scaricate

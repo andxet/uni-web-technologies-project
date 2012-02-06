@@ -2,14 +2,15 @@
     
 function dbConnect(){
 	//print_r(file_exists("script/dbconf.php"));
-	if(file_exists("script/dbconf.php") === false){
-		//echo "sono dbconn!!!!";
-		header("Location: install/index.php");}
+	//if(file_exists("script/dbconf.php") === false){
+	//	echo "sono dbconn!!!!";
+	//	header("Location: install/index.php");}
 	require_once('config.php');
 	
 	$db = mysql_connect(DB_HOST, DB_USER, DB_PASS)
-		//or die("Connessione non riuscita: " . mysql_error());
-		or header("Location: install/index.php");
+		or die("Connessione non riuscita: " . mysql_error());
+	//if(!$db)
+	//	header("Location: install/index.php");
     mysql_select_db(DB_NAME, $db)
     	//or die ("Selezione del database non riuscita: " . mysql_error());
     	or header("Location: install/index.php");
@@ -91,7 +92,7 @@ function getSeries(){
 	}*/
 		
 	//$Q_GET_SERIES = "SELECT * FROM `Serie` LIMIT $inizio, $fine";
-	$Q_GET_SERIES = "SELECT * FROM `Serie`";
+	$Q_GET_SERIES = "SELECT * FROM `Serie` ORDER BY `nome`";
 	return eseguiQuery($Q_GET_SERIES);
 }
 
@@ -198,13 +199,22 @@ function isExistingSeries($user){
 }
 
 function eliminaSerie($serie){
+	require_once(SCRIPT_PATH."immagini.php");
 	$q = "DELETE FROM `Serie` WHERE `Serie`.`idSerie` = '$serie'";
-	return eseguiQuery($q);
+	if(eseguiQuery($q)){
+		eliminaSerieImg($serie);
+		return true;}
+	return false;
+
 }
 
 function eliminaFumetto($fumetto){
+	require_once(SCRIPT_PATH."immagini.php");
 	$q = "DELETE FROM `Fumetti` WHERE `Fumetti`.`idVolume` = '$fumetto'";
-	return eseguiQuery($q);
+	if(eseguiQuery($q)){
+		eliminaFumettoImg($fumetto);
+		return true;}
+	return false;
 }
 
 
@@ -238,6 +248,10 @@ function aggiungiSerie($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
+	
+	if(serieEsistente($vett))
+		return false;
+	
 	$Q_INSERT_SERIE = "INSERT INTO  `Serie` (`nome` , `inCorso`) VALUES ( '".$vett['nome']."', ";
 	if(isset($vett["inCorso"]))
 		$Q_INSERT_SERIE .= " 'true' ";
@@ -259,6 +273,10 @@ function aggiungiFumetto($vett){
 		return false;
 	require_once("config.php");
 	require_once("immagini.php");
+
+	if(volumeEsistente($vett))
+		return false;
+	
 	$Q_ADD_COMIC = "INSERT INTO  `Fumetti` (`idVolume` ,`idSerie` ,`nome` ,`volume` ,`dataUscita`) VALUES (NULL ,  '".$vett["serie"]."', '".$vett["nome"]."',  '".$vett["volume"]."', NOW( ));";
 	$db = dbConnect();
 	$ris = mysql_query($Q_ADD_COMIC, $db)
@@ -268,6 +286,26 @@ function aggiungiFumetto($vett){
 		return false;
 	else
 		return true;	
+}
+
+function volumeEsistente($vett){
+	$q = "SELECT * FROM `Fumetti` WHERE `idSerie` = '".$vett["serie"]."' AND `volume` = '".$vett["volume"]."';";
+	if(mysql_num_rows(eseguiQuery($q)) > 0){
+		global $errori;
+		$errori .= "Questo volume esiste gi&agrave;.";
+		return true;
+	}
+	return false;
+}
+
+function serieEsistente($vett){
+	$q = "SELECT * FROM `Serie` WHERE `nome` = '".$vett["nome"]."';";
+	if(mysql_num_rows(eseguiQuery($q)) > 0){
+		global $errori;
+		$errori .= "Esiste gi&agrave; una serie con questo nome.";
+		return true;
+	}
+	return false;
 }
 
 //Fumzioni per la lista
@@ -375,8 +413,13 @@ function editUserState($vett){
 
 //Query di eliminazione
 function eliminaUtente($utente){
+	require_once(SCRIPT_PATH."immagini.php");
 	$Q_DELETE_USER = "DELETE FROM `Utenti` WHERE `Utenti`.`username` = '$utente'";
-	eseguiQuery($Q_DELETE_USER);
+	if(eseguiQuery($Q_DELETE_USER)){
+		eliminaAvatarImg($utente);
+		return true;}
+	return false;
+	
 	}
 
 function numFumettiPosseduti($user){

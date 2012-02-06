@@ -14,7 +14,7 @@
 							$errori = $form['successo'];
 						}
 					}
-					else die($form['fallimento']);
+					else $errori = $form['fallimento'];
 			}
 			else die("Funzione di controllo form ".$form['funzioneForm']." non esistente.");
 		}
@@ -301,9 +301,7 @@ function isValidMail($mail){
 		return true;
 	else{
 		global $errori;
-		if(USER == "")
-			$errori .= "Esiste gi&agrave; un utente con questa <strong>e-mail</strong>, puoi <a href=\"login.php\">effettuare l'accesso qui.</a><br />";
-		else $errori .= "Esiste gi&agrave; un utente con questa <strong>e-mail</strong>.<br />"; 
+		$errori .= "Esiste gi&agrave; un utente con questa <strong>e-mail</strong>.<br />"; 
 		return false;
 	}
 }

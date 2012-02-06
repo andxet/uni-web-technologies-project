@@ -1,18 +1,21 @@
 <?php
-	require_once("../script/config.php");
-	require_once("../script/funzioni.php");	
+	//require_once("../script/config.php");
+	//require_once("../script/funzioni.php");	
+	if(file_exists("../script/dbconf.php")){
+		//echo "SONO L?ALTR";
+		header("Location: ../index.php");}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" >
    		<!-- <link rel="stylesheet" type="text/css" href="../css/style_layout.css" > -->
-   		<title>Installazione di <?php echo SITE_NAME; ?></title>
+   		<title>Installazione di fumeZZi</title>
     </head>
 <body>	
 
     <div id="container">
-  	<h1>Procedura di installazione di <?php echo SITE_NAME; ?></h1>
+  	<h1>Procedura di installazione di fumeZZi</h1>
   	<p>Inserire i dati per la connessione al database. Il database verr&agrave; popolato con il file "db.sql". I dati di esempio sono contenuti nel file "dati.sql" e servono per dare un idea delle funzionalit&agrave; del sito.</p>
   	<form action="install.php" method="post" name="installForm">
   	<fieldset>
@@ -24,12 +27,7 @@
   		<input type=submit value="Installa!" />
   	</fieldset>
   	</form>
-  	
-            
-  	<div id="footer">
-       <?php printFooter(); ?>
-    </div>      
-    	
+
     </div>
 </body>
 </html> 

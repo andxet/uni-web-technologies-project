@@ -46,7 +46,7 @@ function uploadSerieImg($nomeSerie){
 	if(salvaImmagine(ORIGINAL_PATH.$nomeImg))
 		if(creaMiniatura(ORIGINAL_PATH, $nomeImg, SERIE_PATH, 701, 175)){
 			if(!SAVE_UPLOAD_ORIGINALS)
-				unlink(ORIGINAL_PATH.$originale);
+				unlink(ORIGINAL_PATH.$nomeImg);
 			return true;
 			}
 	return false;
@@ -61,7 +61,7 @@ function uploadFumettoImg($nomeFumetto){
 	if(salvaImmagine(ORIGINAL_PATH.$nomeImg))
 		if(creaMiniatura(ORIGINAL_PATH, $nomeImg, FUMETTI_PATH, 120, 180)){
 			if(!SAVE_UPLOAD_ORIGINALS)
-				unlink(ORIGINAL_PATH.$originale);
+				unlink(ORIGINAL_PATH.$nomeImg);
 			return true;
 			}
 	return false;
@@ -76,7 +76,7 @@ function uploadAvatarImg($avatar){
 	if(salvaImmagine(ORIGINAL_PATH.$nomeImg))
 		if(creaMiniatura(ORIGINAL_PATH, $nomeImg, AVATAR_PATH, 80, 80)){
 			if(!SAVE_UPLOAD_ORIGINALS)
-				unlink(ORIGINAL_PATH.$originale);
+				unlink(ORIGINAL_PATH.$nomeImg);
 			return true;
 			}
 	return false;
@@ -118,6 +118,23 @@ function creaMiniatura($percorsoImmagine, $immagine, $savePath, $width, $height)
 	imagecopyresized($thumb, $src, 0, 0, 0, 0, $width, $height, imageSx($src), imageSy($src)) or die("Impossibile ridimensionare l'immagine");
 	imagejpeg($thumb, $dest, $thumbComp) or die("Impossibile salvare la miniatura"); 		
 	return true;
+}
+
+function eliminaFumettoImg($nomeFumetto){
+	$nomeImg = "Fumetto_".$nomeFumetto.".jpg";
+	//echo $nomeImg;
+	unlink(FUMETTI_PATH.$nomeImg);
+}
+
+function eliminaSerieImg($nomeSerie){
+	$nomeImg = "Serie_".$nomeSerie.".jpg";
+	unlink(SERIE_PATH.$nomeImg);
+}
+
+function eliminaAvatarImg($avatar){
+	$nomeImg = AVATAR_PATH."Avatar_".$avatar.".jpg";
+	if(file_exists($nomeImg))
+		unlink($nomeImg);
 }
 
 ?>
